@@ -3,10 +3,27 @@ Build & Installation
 
 1. mkdir build
 2. cd build
-3. cmake ..
+3. cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 4. make
 5. sudo make install
 
+Dependencies
+============
+
+You require few development packages to be installed. 
+
+RPM based Distributions
+========================
+
+This is from fedora. You may need to adjust things for another distribution.
+
+taglib-devel libmtp-devel libcdio-paranoia-devel ffmpeg-devel mpg123-devel libmusicbrainz5-devel
+qt5-qtmultimedia-devel qt5-qtsvg-devel libudev-devel libebur128-devel libcddb-devel libebur128-devel
+avahi-devel
+
+RPI
+libtag1-dev libmtp-dev libcdio-paranoia-dev libavfilter-dev libmpg123-dev libmusicbrainz5-dev
+qtmultimedia5-dev libqt5svg5-dev libudev-dev libebur128-dev libcddb2-dev libebur128-dev libavahi-client-dev
 
 Mac/Windows
 -----------

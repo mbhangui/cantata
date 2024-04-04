@@ -169,8 +169,10 @@ Scrobbler::Scrobbler()
     , lastNowPlaying(0)
     , nowPlayingIsPending(false)
     , lovePending(false)
+    , unlovePending(false)
     , nowPlayingSent(false)
     , loveSent(false)
+    , unloveSent(false)
     , scrobbledCurrent(false)
     , scrobbleViaMpd(false)
     , failedCount(0)
@@ -337,6 +339,51 @@ void Scrobbler::love()
     sign(params);
     DBUG << song.title << song.artist;
     loveSent=true;
+    unloveSent=false;
+    if (fakeScrobbling) {
+        DBUG << "MSG" << params;
+    } else {
+        QNetworkReply *job=NetworkAccessManager::self()->postFormData(QUrl(scrobblerUrl()), format(params));
+        connect(job, SIGNAL(finished()), this, SLOT(handleResp()));
+    }
+}
+
+void Scrobbler::unlove()
+{
+    if (!lovedTrack()) {
+        return;
+    }
+
+    unlovePending=false;
+    if (!loveIsEnabled) {
+        return;
+    }
+
+    const Track &song=isEnabled() ? currentSong : inactiveSong;
+    if (song.title.isEmpty() || song.artist.isEmpty() || unloveSent) {
+        return;
+    }
+
+    if (scrobbleViaMpd) {
+        emit clientMessage(scrobblerUrl(), QLatin1String("unlove"), scrobbler);
+        unloveSent=true;
+        return;
+    }
+
+    if (!ensureAuthenticated()) {
+        unlovePending=true;
+        return;
+    }
+
+    QMap<QString, QString> params;
+    params["method"] = "track.unlove";
+    params["track"] = song.title;
+    params["artist"] = song.artist;
+    params["sk"] = sessionKey;
+    sign(params);
+    DBUG << song.title << song.artist;
+    loveSent=false;
+    unloveSent=true;
     if (fakeScrobbling) {
         DBUG << "MSG" << params;
     } else {
@@ -401,7 +448,7 @@ void Scrobbler::setSong(const Song &s)
 
     inactiveSong.clear();
     if (currentSong.artist != s.artist || currentSong.title!=s.title || currentSong.album!=s.album) {
-        nowPlayingSent=scrobbledCurrent=loveSent=lovePending=nowPlayingIsPending=false;
+        nowPlayingSent=scrobbledCurrent=loveSent=unloveSent=lovePending=unlovePending=nowPlayingIsPending=false;
         currentSong=Track(s);
         lastNowPlaying=0;
         emit songChanged(!s.isStandardStream() && !s.isEmpty());
@@ -691,6 +738,9 @@ void Scrobbler::authResp()
         if (lovePending) {
             love();
         }
+        if (unlovePending) {
+            unlove();
+        }
     }
 }
 
@@ -831,7 +881,7 @@ void Scrobbler::clientMessageFailed(const QString &client, const QString &msg)
 {
     if (loveSent && client==scrobblerUrl() && msg==QLatin1String("love")) {
         // 'love' failed, so re-enable...
-        loveSent=lovePending=false;
+        loveSent=lovePending=unloveSent=unlovePending=false;
         emit songChanged(true);
     }
 }

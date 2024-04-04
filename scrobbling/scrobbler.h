@@ -28,6 +28,7 @@
 #ifndef SCROBBLER_H
 #define SCROBBLER_H
 
+
 #include <QString>
 #include <QStringList>
 #include <QQueue>
@@ -66,6 +67,8 @@ public:
 
     static Scrobbler * self();
     static void enableDebug();
+    bool loveSent;
+    bool unloveSent;
     static const QLatin1String constCacheDir;
     static const QLatin1String constCacheFile;
 
@@ -99,6 +102,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void love();
+    void unlove();
     void setEnabled(bool e);
     void setLoveEnabled(bool e);
 
@@ -146,8 +150,8 @@ private:
     QTimer * hardFailTimer;
     bool nowPlayingIsPending;
     bool lovePending;
+    bool unlovePending;
     bool nowPlayingSent;
-    bool loveSent;
     bool scrobbledCurrent;
     bool scrobbleViaMpd;
     int failedCount;

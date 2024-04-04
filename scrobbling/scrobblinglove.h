@@ -24,6 +24,7 @@
 #ifndef SCROBBLING_LOVE_H
 #define SCROBBLING_LOVE_H
 
+
 #include "widgets/toolbutton.h"
 #include <QIcon>
 
@@ -33,9 +34,11 @@ class ScrobblingLove : public ToolButton
 public:
     ScrobblingLove(QWidget *p);
     ~ScrobblingLove() override { }
+    void setloveicon();
 
 private Q_SLOTS:
     void sendLove();
+    void sendunLove();
     void songChanged(bool valid);
     void scrobblerChanged();
 

@@ -48,9 +48,11 @@
 #include <QSpacerItem>
 #include <QToolButton>
 #include <QClipboard>
+#include <signal.h>
 
 static const int constPollMpd = 5; // Poll every X seconds when playing
 static const char * constUserSettingProp = "user-setting";
+static ScrobblingLove *mmm;
 
 class PosSliderProxyStyle : public QProxyStyle
 {
@@ -255,6 +257,11 @@ void PosSlider::setRange(int min, int max)
     setEnabled(active);
 }
 
+void setloved(int e)
+{
+	mmm->setloveicon();
+}
+
 NowPlayingWidget::NowPlayingWidget(QWidget *p)
     : QWidget(p)
     , timer(nullptr)
@@ -269,6 +276,7 @@ NowPlayingWidget::NowPlayingWidget(QWidget *p)
     infoLabel=new QLabel(this);
     #ifdef ENABLE_SCROBBLING
     ScrobblingLove *love = new ScrobblingLove(this);
+	mmm = love;
     ratingWidget->ensurePolished();
     int loveSize = ratingWidget->height()+Utils::scaleForDpi(4);
     love->setIconSize(QSize(ratingWidget->height(), ratingWidget->height()));
@@ -330,6 +338,7 @@ NowPlayingWidget::NowPlayingWidget(QWidget *p)
     track->addAction(copy);
     track->setContextMenuPolicy(Qt::NoContextMenu);
     connect(copy, SIGNAL(triggered()), SLOT(copyInfo()));
+	signal(SIGUSR1, setloved);
 }
 
 void NowPlayingWidget::update(const Song &song)
