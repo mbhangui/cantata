@@ -259,7 +259,14 @@ void PosSlider::setRange(int min, int max)
 
 void setloved(int e)
 {
-	mmm->setloveicon();
+	if (mmm)
+		mmm->setloveicon();
+}
+
+void setunloved(int e)
+{
+	if (mmm)
+		mmm->setunloveicon();
 }
 
 NowPlayingWidget::NowPlayingWidget(QWidget *p)
@@ -339,6 +346,7 @@ NowPlayingWidget::NowPlayingWidget(QWidget *p)
     track->setContextMenuPolicy(Qt::NoContextMenu);
     connect(copy, SIGNAL(triggered()), SLOT(copyInfo()));
 	signal(SIGUSR1, setloved);
+	signal(SIGUSR2, setunloved);
 }
 
 void NowPlayingWidget::update(const Song &song)

@@ -35,10 +35,10 @@ public:
     ScrobblingLove(QWidget *p);
     ~ScrobblingLove() override { }
     void setloveicon();
+    void setunloveicon();
 
 private Q_SLOTS:
-    void sendLove();
-    void sendunLove();
+    void love_function();
     void songChanged(bool valid);
     void scrobblerChanged();
 

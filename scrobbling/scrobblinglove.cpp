@@ -26,6 +26,8 @@
 #include "support/monoicon.h"
 #include "support/utils.h"
 
+static int toggle_love;
+
 ScrobblingLove::ScrobblingLove(QWidget *p)
     : ToolButton(p)
 {
@@ -36,43 +38,35 @@ ScrobblingLove::ScrobblingLove(QWidget *p)
     connect(Scrobbler::self(), SIGNAL(songChanged(bool)), SLOT(songChanged(bool)));
     connect(Scrobbler::self(), SIGNAL(scrobblerChanged()), SLOT(scrobblerChanged()));
     setVisible(Scrobbler::self()->isLoveEnabled());
-    connect(this, SIGNAL(clicked()), this, SLOT(sendLove()));
+    connect(this, SIGNAL(clicked()), this, SLOT(love_function()));
     songChanged(false);
 }
 
-void ScrobblingLove::sendLove()
+void ScrobblingLove::love_function()
 {
-#if 0
-    setIcon(loved);
-    setToolTip(tr("%1: Unlove Current Track").arg(Scrobbler::self()->activeScrobbler()));
-#endif
-    connect(this, SIGNAL(clicked()), this, SLOT(sendunLove()));
-    Scrobbler::self()->love();
-#if 1
-    scrobblerChanged();
-#endif
-}
-
-void ScrobblingLove::sendunLove()
-{
-#if 0
-    setIcon(love);
-    setToolTip(tr("%1: Love Current Track").arg(Scrobbler::self()->activeScrobbler()));
-#endif
-    connect(this, SIGNAL(clicked()), this, SLOT(sendLove()));
-    Scrobbler::self()->unlove();
+    if (toggle_love == 0) {
+        fprintf(stderr, "sendLove\n");
+        Scrobbler::self()->love();
+        toggle_love = 1;
+        system("mpc_o love");
+    } else {
+        fprintf(stderr, "sendUnLove\n");
+        Scrobbler::self()->unlove();
+        toggle_love = 0;
+        system("mpc_o unlove");
+    }
     scrobblerChanged();
 }
 
 void ScrobblingLove::songChanged(bool valid)
 {
     setEnabled(valid);
-#if 0
+	toggle_love=0;
+    love = MonoIcon::icon(FontAwesome::hearto, Utils::monoIconColor());
     setIcon(love);
-    setToolTip(tr("%1: Love Current Track").arg(Scrobbler::self()->activeScrobbler()));
-#endif
-    connect(this, SIGNAL(clicked()), this, SLOT(sendLove()));
-    Scrobbler::self()->unlove();
+    setToolTip(tr("%1: Love   Current Track").arg(Scrobbler::self()->activeScrobbler()));
+    Scrobbler::self()->loveSent=false;
+    Scrobbler::self()->unloveSent=true;
     scrobblerChanged();
 }
 
@@ -86,12 +80,22 @@ void ScrobblingLove::scrobblerChanged()
 
 void ScrobblingLove::setloveicon()
 {
+	toggle_love=1;
     loved = MonoIcon::icon(FontAwesome::heart, Utils::monoIconColor());
     setIcon(loved);
     setToolTip(tr("%1: Unlove Current Track").arg(Scrobbler::self()->activeScrobbler()));
     Scrobbler::self()->loveSent=true;
     Scrobbler::self()->unloveSent=false;
-    connect(this, SIGNAL(clicked()), this, SLOT(sendunLove()));
+}
+
+void ScrobblingLove::setunloveicon()
+{
+    love = MonoIcon::icon(FontAwesome::hearto, Utils::monoIconColor());
+    setIcon(love);
+    setToolTip(tr("%1: Love   Current Track").arg(Scrobbler::self()->activeScrobbler()));
+    Scrobbler::self()->loveSent=false;
+    Scrobbler::self()->unloveSent=true;
+	toggle_love=0;
 }
 
 #include "moc_scrobblinglove.cpp"
