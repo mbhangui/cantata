@@ -1,9 +1,11 @@
 Build & Installation
 ====================
 
+# linux
 1. mkdir build
 2. cd build
-3. cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+3. cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_LIBVLC:BOOL=ON -DENABLE_FFMPEG=ON \
+     -DENABLE_UDISKS2:BOOL=ON -DENABLE_CATEGORIZED_VIEW:BOOL=ON -DCMAKE_INSTALL_PREFIX=/usr ..
 4. make
 5. sudo make install
 
@@ -12,14 +14,20 @@ Dependencies
 
 You require few development packages to be installed. 
 
+VERSION
+=======
+Update CPACK_PACKAGE_VERSION_MAJOR, CPACK_PACKAGE_VERSION_MINOR, CPACK_PACKAGE_VERSION_PATCH in
+CMakeLists.txt, cantata.spec, debian/changelog, debian/cantata.dsc
+
 RPM based Distributions
 ========================
 
 This is from fedora. You may need to adjust things for another distribution.
 
-taglib-devel libmtp-devel libcdio-paranoia-devel ffmpeg-devel mpg123-devel libmusicbrainz5-devel
+taglib-devel libmtp-devel libcdio-paranoia-devel mpg123-devel libmusicbrainz5-devel
 qt5-qtmultimedia-devel qt5-qtsvg-devel libudev-devel libebur128-devel libcddb-devel libebur128-devel
-avahi-devel
+avahi-devel ffmpeg-free-devel pkgconfig(cdparanoia-3) pkgconfig(phonon4qt5)
+pkgconfig(taglib-extras) qt5-linguist qtiocompressor-devel
 
 RPI
 libtag1-dev libmtp-dev libcdio-paranoia-dev libavfilter-dev libmpg123-dev libmusicbrainz5-dev
@@ -28,6 +36,7 @@ qtmultimedia5-dev libqt5svg5-dev libudev-dev libebur128-dev libcddb2-dev libebur
 Mac/Windows
 -----------
 See README
+port install taglib qt5 ffmpeg avahi
 
 
 CMake Options

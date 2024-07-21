@@ -790,7 +790,9 @@ These steps assume the following structure:
 
 1. Install HomeBrew
 
-2. brew install cmake taglib ffmpeg openssl qt5
+2. brew install cmake taglib ffmpeg openssl avahi qt5
+   or
+   port install cmake taglib ffmpeg openssl avahi qt5
 
 3. Create the icon
 
@@ -827,8 +829,13 @@ If you have qt6 installed (check version in "brew info qt"), then do this:
 Build and install Cantata:
 
     cd build
+    # for brew
     export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
     cmake -S "../src" -B "./" -DCMAKE_INSTALL_PREFIX="../install" -DENABLE_TAGLIB=ON -DCMAKE_PREFIX_PATH="/usr/local/opt/qt5/;/usr/local/opt/qt5/lib/cmake/Qt5Widgets/" -DCMAKE_BUILD_TYPE=Release
+
+    # for port
+    export Qt5_DIR="/opt/local/libexec/qt5/lib/cmake"
+    cmake -S "../src" -B "./" -DCMAKE_INSTALL_PREFIX="../install" -DENABLE_TAGLIB=ON -DCMAKE_PREFIX_PATH="/opt/local/libexec/qt5/;/opt/local/lib/cmake/Qt5Widgets" -DCMAKE_BUILD_TYPE=Release
     make
     make install
 
@@ -844,3 +851,4 @@ Create Installer
 1. Go into the 'mac' folder within the build folder
 
 2. Run ./create-dmg.sh
+# vim: wrap

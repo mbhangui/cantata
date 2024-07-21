@@ -1,0 +1,113 @@
+--- cantata-2.5.1/CMakeLists.txt.orig	2021-10-06 11:18:08.000000000 -0600
++++ cantata-2.5.1/CMakeLists.txt	2022-10-18 17:03:31.051903788 -0600
+@@ -540,10 +540,9 @@ endif (WIN32)
+ 
+ add_subdirectory(translations)
+ add_subdirectory(support)
+-add_subdirectory(3rdparty/qtiocompressor)
+ add_subdirectory(streams/icons)
+ add_subdirectory(online/icons)
+-target_link_libraries(cantata support-core qtiocompressor ${CANTATA_LIBS} ${QTLIBS} ${ZLIB_LIBRARIES})
++target_link_libraries(cantata support-core Qt5Solutions_IOCompressor-@IOCVERSION@ ${CANTATA_LIBS} ${QTLIBS} ${ZLIB_LIBRARIES})
+ 
+ # enable warnings
+ add_definitions(-DQT_NO_DEBUG_OUTPUT)
+--- cantata-2.5.1/context/albumview.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/context/albumview.cpp	2022-10-18 16:50:04.058343020 -0600
+@@ -26,7 +26,7 @@
+ #include "gui/covers.h"
+ #include "network/networkaccessmanager.h"
+ #include "support/utils.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include "contextengine.h"
+ #include "widgets/textbrowser.h"
+ #include "widgets/icons.h"
+--- cantata-2.5.1/context/artistview.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/context/artistview.cpp	2022-10-18 16:50:47.452425169 -0600
+@@ -26,7 +26,7 @@
+ #include "gui/apikeys.h"
+ #include "support/utils.h"
+ #include "network/networkaccessmanager.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include "widgets/textbrowser.h"
+ #include "widgets/icons.h"
+ #include "contextengine.h"
+--- cantata-2.5.1/context/songview.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/context/songview.cpp	2022-10-18 16:49:39.090295754 -0600
+@@ -43,7 +43,7 @@
+ #include "widgets/textbrowser.h"
+ #include "gui/stdactions.h"
+ #include "mpd-interface/mpdstatus.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include <QFile>
+ #include <QDir>
+ #include <QFileInfo>
+--- cantata-2.5.1/context/wikipediasettings.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/context/wikipediasettings.cpp	2022-10-18 16:50:26.962386378 -0600
+@@ -27,7 +27,7 @@
+ #include "support/icon.h"
+ #include "support/spinner.h"
+ #include "gui/settings.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include "support/utils.h"
+ #include "support/action.h"
+ #include "support/thread.h"
+--- cantata-2.5.1/models/musiclibraryitemroot.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/models/musiclibraryitemroot.cpp	2022-10-18 16:48:05.041117735 -0600
+@@ -31,7 +31,7 @@
+ #include "musiclibrarymodel.h"
+ #include "mpd-interface/mpdparseutils.h"
+ #include "mpd-interface/mpdconnection.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include <QXmlStreamReader>
+ #include <QXmlStreamWriter>
+ #include <QFile>
+--- cantata-2.5.1/models/streamsmodel.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/models/streamsmodel.cpp	2022-10-18 16:48:46.202195646 -0600
+@@ -34,7 +34,7 @@
+ #include "support/action.h"
+ #include "gui/stdactions.h"
+ #include "support/actioncollection.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include "config.h"
+ #include "support/globalstatic.h"
+ #include <QModelIndex>
+--- cantata-2.5.1/online/onlinedbservice.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/online/onlinedbservice.cpp	2022-10-18 16:51:33.034511466 -0600
+@@ -25,7 +25,7 @@
+ #include "gui/covers.h"
+ #include "models/roles.h"
+ #include "network/networkaccessmanager.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include "db/onlinedb.h"
+ #include <QXmlStreamReader>
+ 
+--- cantata-2.5.1/online/podcastservice.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/online/podcastservice.cpp	2022-10-18 16:51:12.179471980 -0600
+@@ -33,7 +33,7 @@
+ #include "mpd-interface/mpdconnection.h"
+ #include "config.h"
+ #include "http/httpserver.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include "network/networkaccessmanager.h"
+ #include "models/roles.h"
+ #include "models/playqueuemodel.h"
+--- cantata-2.5.1/scrobbling/scrobbler.cpp.orig	2022-01-08 14:24:03.000000000 -0700
++++ cantata-2.5.1/scrobbling/scrobbler.cpp	2022-10-18 16:49:11.801244102 -0600
+@@ -34,7 +34,7 @@
+ #include "support/globalstatic.h"
+ #include "support/utils.h"
+ #include "support/configuration.h"
+-#include "qtiocompressor/qtiocompressor.h"
++#include <qt5/QtSolutions/qtiocompressor.h>
+ #include <QUrl>
+ #include <QStringList>
+ #include <QCryptographicHash>

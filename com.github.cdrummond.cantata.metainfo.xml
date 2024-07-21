@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.github.cdrummond.cantata</id>
+  <metadata_license>0BSD</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+  <name>cantata</name>
+  <summary>Music Player Daemon (MPD) graphical client</summary>
+  <description>
+    <p>
+      Cantata is a graphical client for the Music Player Daemon (MPD).
+    </p>
+    <p>
+      Features:
+    </p>
+    <ul>
+      <li>Multiple MPD collections.</li>
+      <li>Highly customisable layout.</li>
+      <li>Songs grouped by album in play queue.</li>
+      <li>Context view to show artist, album, and song information of current track.</li>
+      <li>Simple tag editor.</li>
+      <li>* File organizer - use tags to organize files and folders.</li>
+      <li>* Ability to calculate ReplyGain tags.</li>
+      <li>* Dynamic playlists.</li>
+      <li>* Online services; Jamendo, Magnatune, SoundCloud, and Podcasts.</li>
+      <li>* Radio stream support - with the ability to search for streams via TuneIn and ShoutCast.</li>
+      <li>* USB-Mass-Storage and MTP device support.</li>
+      <li>* Audio CD ripping and playback.</li>
+      <li>* Playback of non-MPD songs, via simple in-built HTTP server.</li>
+      <li>* MPRISv2 DBUS interface.</li>
+      <li>* Support for KDE global shortcuts (KDE builds), GNOME media keys, and generic media keys (via Qxt support).</li>
+      <li>* Ubuntu/ambiance theme integration.</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">cantata.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/CDrummond/cantata/raw/master/screenshots/mainwindow.png</image>
+      <caption>Sample view</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>devel@lists.fedoraproject.org</update_contact>
+  <url type="homepage">https://github.com/CDrummond/cantata</url>
+  <url type="bugtracker">https://github.com/CDrummond/cantata/issues</url>
+  <url type="donation">https://www.paypal.com/donate/?cmd=_s-xclick&amp;hosted_button_id=2X2CTDUH27V9L&amp;source=url</url>
+  <content_rating type="oars-1.1"></content_rating>
+  <provides>
+    <binary>cantata</binary>
+  </provides>
+</component>

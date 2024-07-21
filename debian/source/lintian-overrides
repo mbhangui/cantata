@@ -1,0 +1,7 @@
+cantata source: no-phrase Maintainer *
+cantata source: source-ships-excluded-file *
+cantata source: binary-nmu-debian-revision-in-source *
+cantata source: inconsistent-appstream-metadata-license *
+# See https://nordisch.org/posts/the-debian-changelog-and-obs/
+cantata source: bad-distribution-in-changes-file *
+cantata source: source-includes-file-in-files-excluded *

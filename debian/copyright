@@ -1,0 +1,599 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: cantata
+Source: https://github.com/CDrummond/cantata
+Comment: Unneeded 3rd party source code removed
+Files-Excluded:
+    3rdparty/ebur128
+    3rdparty/qtsingleapplication
+    3rdparty/qxt
+    windows/icu
+License: GPL-3+
+
+Files: *
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: 3rdparty/*
+Copyright: 2007, 2009, Rafael Fernández López <ereslibre@kde.org>
+License: LGPL-2+
+
+Files: 3rdparty/kcategorizedview/kcategorizedsortfilterproxymodel.cpp
+  3rdparty/kcategorizedview/kcategorizedsortfilterproxymodel.h
+  3rdparty/kcategorizedview/kcategorizedsortfilterproxymodel_p.h
+Copyright: 2007, Rafael Fernández López <ereslibre@kde.org>
+  2007, John Tapsell <tapsell@kde.org>
+License: LGPL-2+
+
+Files: 3rdparty/qtiocompressor/*
+Copyright: 2009, Nokia Corporation and/or its subsidiary(-ies).
+License: GPL-3 or LGPL-2.1
+
+Files: 3rdparty/solid-lite/*
+Copyright: 2005-2007, 2010, Kevin Ottens <ervin@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/*
+Copyright: 2010, Michael Zanetti <mzanetti@kde.org>
+  2010, 2011, Lukas Tinkl <ltinkl@redhat.com>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/hal/*
+Copyright: 2005-2007, 2010, Kevin Ottens <ervin@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/hal/halportablemediaplayer.cpp
+  3rdparty/solid-lite/backends/hal/halportablemediaplayer.h
+Copyright: 2007, Jeff Mitchell <kde-dev@emailgoeshere.com>
+  2006, Davide Bettio <davide.bettio@kdemail.net>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/iokit/*
+Copyright: 2009, Harald Fernengel <harry@kdevelop.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/shared/*
+Copyright: 2009, Benjamin K. Stuhl <bks24@cornell.edu>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/shared/rootdevice.cpp
+  3rdparty/solid-lite/backends/shared/rootdevice.h
+Copyright: 2010, Mario Bensi <mbensi@ipsquad.net>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udev/*
+Copyright: 2010, Rafael Fernández López <ereslibre@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udev/udevblock.cpp
+  3rdparty/solid-lite/backends/udev/udevblock.h
+Copyright: 2009, 2010, Pino Toscano <pino@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udev/udevdeviceinterface.cpp
+  3rdparty/solid-lite/backends/udev/udevdeviceinterface.h
+  3rdparty/solid-lite/backends/udev/udevgenericinterface.cpp
+  3rdparty/solid-lite/backends/udev/udevgenericinterface.h
+Copyright: 2005-2007, 2010, Kevin Ottens <ervin@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks/udisks.h
+  3rdparty/solid-lite/backends/udisks/udisksgenericinterface.cpp
+  3rdparty/solid-lite/backends/udisks/udisksgenericinterface.h
+Copyright: 2009, 2010, Pino Toscano <pino@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks/udisksblock.cpp
+  3rdparty/solid-lite/backends/udisks/udisksblock.h
+  3rdparty/solid-lite/backends/udisks/udisksdeviceinterface.cpp
+  3rdparty/solid-lite/backends/udisks/udisksdeviceinterface.h
+  3rdparty/solid-lite/backends/udisks/udisksstoragevolume.h
+Copyright: 2010, Michael Zanetti <mzanetti@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks/udisksstorageaccess.cpp
+  3rdparty/solid-lite/backends/udisks/udisksstorageaccess.h
+Copyright: 2009, Pino Toscano <pino@kde.org>
+  2009, 2011, Lukas Tinkl <ltinkl@redhat.com>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks2/*
+Copyright: 2010-2012, Lukáš Tinkl <ltinkl@redhat.com>
+  2010, Michael Zanetti <mzanetti@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks2/udisks2.h
+  3rdparty/solid-lite/backends/udisks2/udisksblock.cpp
+  3rdparty/solid-lite/backends/udisks2/udisksblock.h
+  3rdparty/solid-lite/backends/udisks2/udisksmanager.cpp
+Copyright: 2012, Lukáš Tinkl <ltinkl@redhat.com>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks2/udisksdevicebackend.cpp
+  3rdparty/solid-lite/backends/udisks2/udisksdevicebackend.h
+Copyright: 2012, Dan Vrátil <dvratil@redhat.com>
+  2010-2012, Lukáš Tinkl <ltinkl@redhat.com>
+  2010, Michael Zanetti <mzanetti@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks2/udisksdeviceinterface.cpp
+  3rdparty/solid-lite/backends/udisks2/udisksdeviceinterface.h
+  3rdparty/solid-lite/backends/udisks2/udisksstoragevolume.h
+Copyright: 2010, Michael Zanetti <mzanetti@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks2/udisksgenericinterface.cpp
+  3rdparty/solid-lite/backends/udisks2/udisksstorageaccess.cpp
+  3rdparty/solid-lite/backends/udisks2/udisksstorageaccess.h
+Copyright: 2009-2012, Lukáš Tinkl <ltinkl@redhat.com>
+  2009, Pino Toscano <pino@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/udisks2/udisksgenericinterface.h
+Copyright: 2009, 2010, Pino Toscano <pino@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/wmi/*
+Copyright: 2012, Patrick von Reth <vonreth@kde.org>
+  2005-2007, Kevin Ottens <ervin@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/wmi/wmiblock.cpp
+  3rdparty/solid-lite/backends/wmi/wmiblock.h
+  3rdparty/solid-lite/backends/wmi/wmideviceinterface.cpp
+  3rdparty/solid-lite/backends/wmi/wmideviceinterface.h
+  3rdparty/solid-lite/backends/wmi/wmigenericinterface.cpp
+  3rdparty/solid-lite/backends/wmi/wmigenericinterface.h
+Copyright: 2005-2007, 2010, Kevin Ottens <ervin@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/wmi/wmiportablemediaplayer.cpp
+  3rdparty/solid-lite/backends/wmi/wmiportablemediaplayer.h
+Copyright: 2007, Jeff Mitchell <kde-dev@emailgoeshere.com>
+  2006, Davide Bettio <davide.bettio@kdemail.net>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/backends/wmi/wmiquery.cpp
+  3rdparty/solid-lite/backends/wmi/wmiquery.h
+Copyright: 2012, Patrick von Reth <vonreth@kde.org>
+  2008, Jeff Mitchell <mitchell@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/ifaces/portablemediaplayer.cpp
+Copyright: 2006, Davide Bettio <davide.bettio@kdemail.net>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/ifaces/portablemediaplayer.h
+Copyright: 2007, Jeff Mitchell <kde-dev@emailgoeshere.com>
+  2006, Davide Bettio <davide.bettio@kdemail.net>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/portablemediaplayer.cpp
+  3rdparty/solid-lite/portablemediaplayer.h
+Copyright: 2007, Kevin Ottens <ervin@kde.org>
+  2007, Jeff Mitchell <kde-dev@emailgoeshere.com>
+  2006, Davide Bettio <davide.bettio@kdemail.net>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/portablemediaplayer_p.h
+Copyright: 2007, Kevin Ottens <ervin@kde.org>
+  2006, Davide Bettio <davide.bettio@kdemail.net>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/predicate_lexer.c
+  3rdparty/solid-lite/predicate_parser.c
+  3rdparty/solid-lite/predicate_parser.h
+Copyright: 1984, 1989, 1990, 2000-2006, Free Software Foundation, Inc.
+License: GPL-2+
+
+Files: 3rdparty/solid-lite/solidnamespace.h
+Copyright: 2011, Lukas Tinkl <ltinkl@redhat.com>
+  2007, Kevin Ottens <ervin@kde.org>
+License: LGPL-2.1 or LGPL-3
+
+Files: 3rdparty/solid-lite/xdgbasedirs.cpp
+  3rdparty/solid-lite/xdgbasedirs_p.h
+Copyright: 2007, Kevin Krammer <kevin.krammer@gmx.at>
+License: LGPL-2+
+
+Files: context/lyricsettings.cpp
+  context/lyricsettings.h
+  context/ultimatelyrics.cpp
+  context/ultimatelyrics.h
+  context/ultimatelyricsprovider.cpp
+  context/ultimatelyricsprovider.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+  2010, David Sansome <me@davidsansome.com>
+License: GPL-3+
+
+Files: debian/*
+Copyright: 2013-2022, Stuart Prescott <stuart@debian.org>
+  2012, Jean-Philippe Garcia Ballester <giga@le-pec.org>
+License: GPL-2+
+
+Files: devices/encoders.cpp
+Copyright: 2010, Téo Mrnjavac <teo@kde.org>
+ 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: devices/musicbrainz.cpp
+  devices/musicbrainz.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+  2005-2007, Richard Lärkäng <nouseforaname@home.se>
+License: LGPL-2+
+
+Files: devices/transcodingjob.h
+  devices/valueslider.cpp
+  devices/valueslider.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+  2010, Téo Mrnjavac <teo@kde.org>
+License: GPL-2+
+
+Files: gui/avahidiscovery.cpp
+  gui/avahidiscovery.h
+  gui/avahipoll.cpp
+  gui/avahipoll.h
+Copyright: 2017, Alex B
+License: GPL-2+
+
+Files: gui/findmpddialog.cpp
+  gui/findmpddialog.h
+Copyright: 2017, Alex B
+License: GPL-3+
+
+Files: gui/mainwindow.cpp
+  gui/mainwindow.h
+Copyright: 2008, Sander Knopper (sander@knopper.tk)
+ Roeland Douma (roeland@rullzer.com)
+ 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: icons/*
+Copyright: Suru project
+License: LGPL-3
+
+Files: models/musiclibraryitem.cpp
+  models/musiclibraryitem.h
+  models/musiclibraryitemalbum.cpp
+  models/musiclibraryitemalbum.h
+  models/musiclibraryitemartist.cpp
+  models/musiclibraryitemartist.h
+  models/musiclibraryitemroot.cpp
+  models/musiclibraryitemroot.h
+  models/musiclibraryitemsong.h
+  models/musiclibrarymodel.cpp
+  models/musiclibrarymodel.h
+  models/musiclibraryproxymodel.cpp
+  models/musiclibraryproxymodel.h
+  models/playlistsmodel.cpp
+  models/playlistsmodel.h
+  models/playlistsproxymodel.cpp
+  models/playlistsproxymodel.h
+  models/playqueuemodel.cpp
+  models/playqueuemodel.h
+  models/playqueueproxymodel.cpp
+  models/playqueueproxymodel.h
+Copyright: 2008, Sander Knopper (sander@knopper.tk)
+ Roeland Douma (roeland@rullzer.com)
+ 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: mpd-interface/*
+Copyright: 2008, Sander Knopper (sander@knopper.tk)
+ Roeland Douma (roeland@rullzer.com)
+ 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: mpd-interface/cuefile.cpp
+  mpd-interface/cuefile.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+  2010, David Sansome <me@davidsansome.com>
+License: GPL-3+
+
+Files: mpd-interface/httpstream.cpp
+  mpd-interface/httpstream.h
+  mpd-interface/mpduser.cpp
+  mpd-interface/mpduser.h
+  mpd-interface/stream.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: scrobbling/scrobbler.cpp
+  scrobbling/scrobbler.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+  2009, Voker57 <voker57@gmail.com>
+  2005-2008, Håvard Tautra Knutsen <havtknut@tihlde.org>
+License: GPL-2+
+
+Files: support/Cantata-FontAwesome.ttf
+Copyright: 2012-2016, Dave Gandy <drgandy@alum.mit.edu>
+License: OFL-1.1
+
+Files: support/acceleratormanager.cpp
+  support/acceleratormanager.h
+Copyright: 2002, Matthias Hölzer-Klüpfel <mhk@kde.org>
+License: LGPL-2+
+
+Files: support/acceleratormanager_private.h
+Copyright: 2002, Matthias H�zer-Klpfel <mhk@kde.org>
+License: LGPL-2+
+
+Files: support/action.cpp
+  support/action.h
+  support/actioncollection.cpp
+  support/actioncollection.h
+  support/keysequencewidget.cpp
+  support/keysequencewidget.h
+Copyright: 2005-2015, the Quassel Project
+License: GPL-2+
+
+Files: support/fancytabwidget.cpp
+  support/fancytabwidget.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: LGPL-2.1
+
+Files: support/kmessagewidget.cpp
+  support/kmessagewidget.h
+Copyright: 2011, Aurélien Gâteau <agateau@kde.org>
+License: LGPL-2.1+
+
+Files: support/shortcutsmodel.cpp
+  support/shortcutsmodel.h
+  support/shortcutssettingswidget.cpp
+  support/shortcutssettingswidget.h
+Copyright: 2010, the Quassel Project
+License: GPL-2 or GPL-3
+
+Files: support/windowmanager.cpp
+  support/windowmanager.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: Expat
+
+Files: tags/filetyperesolver.cpp
+  tags/filetyperesolver.h
+Copyright: 2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+  2011, Ralf Engels <ralf-engels@gmx.de>
+  2005, Martin Aumueller <aumueller@reserv.at>
+License: GPL-2+
+
+Files: widgets/autohidingsplitter.cpp
+  widgets/autohidingsplitter.h
+Copyright: 2012, Piotr Wicijowski <piotr.wicijowski@gmail.com>
+  2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: widgets/categorizedview.h
+Copyright: s2018 Craig Drummond <craig.p.drummond@gmail.com>
+License: GPL-2+
+
+Files: widgets/stretchheaderview.cpp
+  widgets/stretchheaderview.h
+Copyright: 2010, David Sansome <me@davidsansome.com>
+License: GPL-3+
+
+License: Expat
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+
+License: GPL-2
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of version 2 of the GNU General Public License as published
+ by the Free Software Foundation.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+
+License: GPL-3
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-3".
+
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-3".
+
+License: LGPL-2+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
+ .
+ You should have received a copy of the GNU Library General Public
+ License along with this library; if not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License version 2 can be found in "/usr/share/common-licenses/LGPL-2".
+
+License: LGPL-2.1
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License version 2.1 can be found in "/usr/share/common-licenses/LGPL-2.1".
+
+License: LGPL-2.1+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License version 2.1 can be found in "/usr/share/common-licenses/LGPL-2.1".
+
+License: LGPL-3
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU Lesser General Public License as published by the
+ Free Software Foundation; version 3 of the License.
+ .
+ On Debian systems, the complete text of version 3 of the GNU Lesser
+ General Public License can be found in `/usr/share/common-licenses/LGPL-3'.
+
+License: OFL-1.1
+ PREAMBLE
+  The goals of the Open Font License (OFL) are to stimulate worldwide
+ development of collaborative font projects, to support the font creation
+ efforts of academic and linguistic communities, and to provide a free and
+ open framework in which fonts may be shared and improved in partnership
+ with others.
+ .
+ The OFL allows the licensed fonts to be used, studied, modified and
+ redistributed freely as long as they are not sold by themselves. The
+ fonts, including any derivative works, can be bundled, embedded,
+ redistributed and/or sold with any software provided that any reserved
+ names are not used by derivative works. The fonts and derivatives,
+ however, cannot be released under any other type of license. The
+ requirement for fonts to remain under this license does not apply
+ to any document created using the fonts or their derivatives.
+ .
+ DEFINITIONS
+ "Font Software" refers to the set of files released by the Copyright
+ Holder(s) under this license and clearly marked as such. This may
+ include source files, build scripts and documentation.
+ .
+ "Reserved Font Name" refers to any names specified as such after the
+ copyright statement(s).
+ .
+ "Original Version" refers to the collection of Font Software components as
+ distributed by the Copyright Holder(s).
+ .
+ "Modified Version" refers to any derivative made by adding to, deleting,
+ or substituting -- in part or in whole -- any of the components of the
+ Original Version, by changing formats or by porting the Font Software to a
+ new environment.
+ .
+ "Author" refers to any designer, engineer, programmer, technical
+ writer or other person who contributed to the Font Software.
+ .
+ PERMISSION & CONDITIONS
+  Permission is hereby granted, free of charge, to any person obtaining
+ a copy of the Font Software, to use, study, copy, merge, embed, modify,
+ redistribute, and sell modified and unmodified copies of the Font
+ Software, subject to the following conditions:
+ .
+ 1) Neither the Font Software nor any of its individual components,
+    in Original or Modified Versions, may be sold by itself.
+ .
+ 2) Original or Modified Versions of the Font Software may be bundled,
+    redistributed and/or sold with any software, provided that each copy
+    contains the above copyright notice and this license. These can be
+    included either as stand-alone text files, human-readable headers or
+    in the appropriate machine-readable metadata fields within text or
+    binary files as long as those fields can be easily viewed by the user.
+ .
+ 3) No Modified Version of the Font Software may use the Reserved Font
+    Name(s) unless explicit written permission is granted by the corresponding
+    Copyright Holder. This restriction only applies to the primary font
+    name as presented to the users.
+ .
+ 4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+    Software shall not be used to promote, endorse or advertise any
+    Modified Version, except to acknowledge the contribution(s) of the
+    Copyright Holder(s) and the Author(s) or with their explicit written
+    permission.
+ .
+ 5) The Font Software, modified or unmodified, in part or in whole,
+    must be distributed entirely under this license, and must not be
+    distributed under any other license. The requirement for fonts to
+    remain under this license does not apply to any document created
+    using the Font Software.
+ .
+ TERMINATION
+  This license becomes null and void if any of the above conditions are
+ not met.
+ .
+ DISCLAIMER
+  THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+ OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+ COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+ DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+ OTHER DEALINGS IN THE FONT SOFTWARE.

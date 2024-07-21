@@ -49,12 +49,12 @@ class UserNotificationItemClass
 public:
     UserNotificationItemClass() {
         item = [UserNotificationItem alloc];
-        if(QOperatingSystemVersion::current() >= QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 10, 8)) {
+        if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 11, 0)) {
             [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:item];
         }
     }
     ~UserNotificationItemClass() {
-        if(QOperatingSystemVersion::current() >= QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 10, 8)) {
+        if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 11, 0)) {
             [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:nil];
         }
         [item release];
@@ -64,7 +64,7 @@ public:
 
 void MacNotify::showMessage(const QString &title, const QString &text, const QImage &img)
 {
-    if(QOperatingSystemVersion::current() >= QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 10, 8)) {
+    if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 11, 0)) {
         static UserNotificationItemClass *n=0;
         if (!n) {
             n=new UserNotificationItemClass();

@@ -7,3 +7,8 @@ Release @version@-@release@ Start 27/04/2023 End XX/XX/XXXX
 - 04/04/2024
 02. Updated INSTALL file with list of packages to be installed for RPM and
     Debian systems
+- 10/04/2024
+03. Use SIGUSR1, SIGUSR2 to turn on, off love scrobble button
+- 25/04/2024
+04. Added packaging files for debian, rpm packaging using Open Build Service
+05. Updated INSTALL, README files for building on MacOS

@@ -1,0 +1,3 @@
+version=4
+opts="dversionmangle=s/[.+]ds[0-9]//,filenamemangle=s/.+\/v?(\d\S*)\.tar\.gz/cantata-$1\.tar\.gz/,repacksuffix=.ds1" \
+  https://github.com/mbhangui/cantata/tags .*/v?(\d\S*)\.tar\.gz

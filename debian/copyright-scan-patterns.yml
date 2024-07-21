@@ -1,0 +1,40 @@
+---
+check:
+  pattern:
+  - playlists/cantata-dynamic
+  suffixes:
+  - ttf
+ignore:
+  pattern:
+  - /debian/
+  - CMakeLists.txt
+  - COPYING.*
+  - LICENSE.*
+  - LGPL_EXCEPTION.txt
+  - Qt.License.*
+  - README.*
+  - ChangeLog
+  - AUTHORS
+  - INSTALL
+  - TODO
+  - DS_Store.in
+  - index.theme
+  suffixes:
+  - png
+  - svg
+  - jpg
+  - xcf
+  - ico
+  - pdf
+  - pyc
+  - qrc
+  - ts
+  - cmake
+  - xml
+  - conf
+  - ui
+  - icns
+  - desktop
+  - service
+  - sh
+  - rc

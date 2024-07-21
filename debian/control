@@ -1,0 +1,60 @@
+Source: cantata
+Section: sound
+Priority: optional
+Maintainer: Manvendra Bhangui <cantata@indimail.org>
+Build-Depends: debhelper (>= 12),
+ cmake,
+ libavahi-client-dev,
+ libavahi-common-dev,
+ libavcodec-dev,
+ libavformat-dev,
+ libavutil-dev,
+ libcddb2-dev,
+ libcdio-paranoia-dev,
+ libdbus-1-dev,
+ libebur128-dev,
+ libmpg123-dev,
+ libmtp-dev,
+ libmusicbrainz5-dev,
+ libqt5svg5-dev,
+ libspeex-dev,
+ libspeexdsp-dev,
+ libtag1-dev,
+ libudev-dev [linux-any],
+ pkg-config,
+ pkg-kde-tools,
+ qtbase5-dev,
+ qtmultimedia5-dev,
+ qttools5-dev,
+ qttools5-dev-tools,
+Standards-Version: 4.5.0
+Homepage: https://github.com/mbhangui/cantata
+Rules-Requires-Root: no
+
+Package: cantata
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+ fonts-font-awesome,
+ libqt5sql5-sqlite,
+Recommends:
+ liburi-perl,
+ libio-socket-ip-perl,
+Provides:
+ mpd-client,
+Suggests:
+ media-player-info,
+ mpd,
+Description: Qt client for the music player daemon (MPD)
+ Cantata is a graphical front-end for the music player daemon, MPD. It provides
+ many tools to view and manage the music collection including:
+ .
+   * library - sorted by album, artist, track, directory
+   * albums with cover art
+   * user defined playlists
+   * dynamic playlists
+   * streams, internet radio
+   * lyrics
+   * artist information from Wikipedia
+   * device support for USB mass storage, MTP and CDs

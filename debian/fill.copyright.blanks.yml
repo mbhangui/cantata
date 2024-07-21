@@ -1,0 +1,70 @@
+---
+3rdparty/qtiocompressor/:
+    copyright: "2009, Nokia Corporation and/or its subsidiary(-ies)."
+    override-license: GPL-3 or LGPL-2.1
+
+3rdparty/solid-lite/backends/udisks2/dbus/:
+    skip: '1'
+
+3rdparty/solid-lite/predicate:
+    copyright: 1984, 1989, 1990, 2000-2006, Free Software Foundation, Inc.
+    license: GPL-2+
+
+3rdparty/solid-lite/solid_export.h:
+    skip: '1'
+
+.github/*:
+    skip: '1'
+
+cmake_uninstall.cmake.in:
+    skip: '1'
+
+devices/encoders.cpp:
+    override-copyright: |-
+        2010, Téo Mrnjavac <teo@kde.org>
+        2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+    license: GPL-2+
+
+gui/mainwindow.*:
+    override-copyright: |-
+        2008, Sander Knopper (sander AT knopper DOT tk)
+        Roeland Douma (roeland AT rullzer DOT com)
+        2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+    license: GPL-2+
+
+icons/yaru/render-bitmaps.py:
+    copyright: 'Suru project'
+
+mac/dmg/create-dmg.sh.in:
+    skip: '1'
+
+mpd-interface/mpd.conf.template:
+    skip: '1'
+
+mpd-interface/(mpdc|mpdp|mpds|output|playlist|song).*:
+    override-copyright: |-
+        2008, Sander Knopper (sander AT knopper DOT tk)
+        Roeland Douma (roeland AT rullzer DOT com)
+        2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+    license: GPL-2+
+
+models/(musiclibrary|play).*:
+    override-copyright: |-
+        2008, Sander Knopper (sander AT knopper DOT tk)
+        Roeland Douma (roeland AT rullzer DOT com)
+        2011-2018, Craig Drummond <craig.p.drummond@gmail.com>
+    license: GPL-2+
+
+playlists/cantata-dynamic:
+    copyright: "2011-2018, Craig Drummond <craig.p.drummond@gmail.com>"
+    license: GPL-2+
+
+replaygain/*:
+    license: GPL-2+
+
+support/shortcuts.*:
+    override-license: GPL-2 or GPL-3
+
+support/Cantata-FontAwesome.ttf:
+    license: OFL-1.1
+    override-copyright: 2012-2016, Dave Gandy <drgandy@alum.mit.edu>

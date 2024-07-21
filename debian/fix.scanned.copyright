@@ -1,0 +1,6 @@
+// Remove (at) constructs from email addresses
+! Files:~/ Copyright=~s/\s*\(at\)\s*/@/g
+! Files:~/ Copyright=~s/\s*AT\s*/@/g
+! Files:~/ Copyright=~s/\s*DOT\s*/./g
+// Fix up some broken parsing
+! Files:~/ Copyright=~"s/<([\d-]+)> Alex B/$1, Alex B/"
