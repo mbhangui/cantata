@@ -2891,85 +2891,85 @@ If this search does find new lyrics, these will still be associated with the ori
 <context>
     <name>MPDConnection</name>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="176"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="179"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="454"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="503"/>
         <source>Connection to %1 failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="455"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="504"/>
         <source>Connection to %1 failed - please check your proxy settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="456"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="505"/>
         <source>Connection to %1 failed - incorrect password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="566"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="615"/>
         <source>Connecting to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="685"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="732"/>
         <source>Failed to send command to %1 - not connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="754"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="801"/>
         <source>Failed to load. Please check user &quot;mpd&quot; has read permission.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="756"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="803"/>
         <source>Failed to load. MPD can only play local files if connected via a local socket.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="758"/>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="765"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="805"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="812"/>
         <source>MPD reported the following error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="762"/>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="773"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="809"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="820"/>
         <source>Failed to send command. Disconnected from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1917"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1931"/>
         <source>Failed to rename &lt;b&gt;%1&lt;/b&gt; to &lt;b&gt;%2&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1932"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1946"/>
         <source>Failed to save &lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1945"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1959"/>
         <source>You cannot add parts of a cue sheet to a playlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1948"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1962"/>
         <source>You cannot add a playlist to another playlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="2203"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="2217"/>
         <source>Failed to send &apos;%1&apos; to %2. Please check %2 is registered with MPD.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="2492"/>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="2519"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="2507"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="2534"/>
         <source>Cannot store ratings, as the &apos;sticker&apos; MPD command is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5843,13 +5843,13 @@ width x height</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="212"/>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="214"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="215"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="217"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="225"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="228"/>
         <source>&quot;%1&quot; (%2:%3)</source>
         <comment>name (host:port)</comment>
         <translation type="unfinished"></translation>
