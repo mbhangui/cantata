@@ -186,6 +186,7 @@ if (TAGLIB_FOUND)
         macro_log_feature(MTP_FOUND "libmtp" "MTP Device Support." "http://libmtp.sourceforge.net")
     endif ()
 else (TAGLIB_FOUND)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-but-set-variable -Wno-unused-parameter")
    set(ENABLE_DEVICES_SUPPORT OFF)
 endif ()
 
@@ -212,6 +213,18 @@ if (Qt5_POSITION_INDEPENDENT_CODE)
 else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 endif ()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wpedantic -Wall -Wextra \
+    -Wno-cast-qual -Wno-float-equal \
+	-Wno-reorder -Wno-implicit-fallthrough -Wno-unused-parameter \
+    -Wmissing-format-attribute -Wpacked -Wredundant-decls")
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    # flags unique to GCC
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wduplicated-branches -Wduplicated-cond -Wlogical-op")
+    # flags that are hard to fix under Clang
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcast-align -Wdouble-promotion")
+endif()
 
 if (APPLE OR WIN32 OR HAIKU)
     get_target_property(QT_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
