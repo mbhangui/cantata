@@ -619,7 +619,7 @@ static void readAPETags(TagLib::APE::Tag *tag, Song *song, ReplayGain *rg, QImag
         if (map.contains("COVER ART (FRONT)")) {
             const TagLib::ByteVector nullStringTerminator(1, 0);
 
-            TagLib::ByteVector item = map["COVER ART (FRONT)"].value();
+            TagLib::ByteVector item = map["COVER ART (FRONT)"].binaryData();
             int pos = item.find(nullStringTerminator);   // Skip the filename
 
             if (++pos > 0) {
@@ -1300,8 +1300,8 @@ static void readTags(const TagLib::FileRef fileref, Song *song, ReplayGain *rg, 
             readID3v2Tags(file->tag(), song, rg, img, lyrics, rating);
         }
     } else if (TagLib::RIFF::WAV::File *file = dynamic_cast< TagLib::RIFF::WAV::File * >(fileref.file())) {
-        if (file->tag()) {
-            readID3v2Tags(file->tag(), song, rg, img, lyrics, rating);
+        if (file->hasID3v2Tag()) {
+            readID3v2Tags(file->ID3v2Tag(), song, rg, img, lyrics, rating);
         }
     #ifdef TAGLIB_ASF_FOUND
     } else if (TagLib::ASF::File *file = dynamic_cast< TagLib::ASF::File * >(fileref.file())) {
@@ -1418,8 +1418,8 @@ static bool writeTags(const TagLib::FileRef fileref, const Song &from, const Son
             changed=writeID3v2Tags(file->tag(), from, to, rg, img, rating) || changed;
         }
     } else if (TagLib::RIFF::WAV::File *file = dynamic_cast< TagLib::RIFF::WAV::File * >(fileref.file())) {
-        if (file->tag()) {
-            changed=writeID3v2Tags(file->tag(), from, to, rg, img, rating) || changed;
+        if (file->hasID3v2Tag()) {
+            changed=writeID3v2Tags(file->ID3v2Tag(), from, to, rg, img, rating) || changed;
         }
     #ifdef TAGLIB_ASF_FOUND
     } else if (TagLib::ASF::File *file = dynamic_cast< TagLib::ASF::File * >(fileref.file())) {
