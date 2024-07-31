@@ -788,7 +788,7 @@ These steps assume the following structure:
     build/
     install/
 
-1. Install HomeBrew
+1. Install HomeBrew / macports
 
 2. brew install cmake taglib ffmpeg openssl avahi qt5
    or

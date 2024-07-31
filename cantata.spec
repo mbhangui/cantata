@@ -1,8 +1,8 @@
 
 Name:    cantata
 Summary: Music Player Daemon (MPD) graphical client
-Version: 2.5.1
-Release: 3.0%{?dist}
+Version: 2.5.2
+Release: 1.1%{?dist}
 
 # Most files in this project are GPL-2.0-or-later.  Exceptions:
 # (GPL-2.0-only OR GPL-3.0-only):
@@ -157,6 +157,21 @@ appstreamcli validate --no-net \
 %dir %{_datadir}/cantata/translations/
 
 %changelog
+* Wed Jul 31 2024 11:54:03 +0530 Manvendra Bhangui <cantata@indimail.org> 2.5.2-1.1
+- mac/macnotify.mm: Fixed crash on macos when output device is changed
+- mpd-interface/mpdconnections.h: fixed "Unsupported URI scheme" error
+  message in mpd log (incorrect lsinfo command)
+- mpd-interface/mpdconnections.cpp: Increased constConnTimer value to 10000,
+  constSocketCommsTimeout to 4000, constConnTimer to 10000
+- mpd-interface/mpdconnections.cpp: added constSocketDataTimeout=2000
+- mpd-interface/mpdconnections.cpp: Changed [Radio Streams] to Radio-Streams
+- mpd-interface/mpdconnections.cpp: Create MPD_HOST, MUSIC_DIR files in
+  $HOME/.config/cantata
+- mpd-interface/mpdconnections.cpp: fixed multiple reconnects from power
+  management code
+- mpd-interface/mpdconnections.cpp: removed dead code
+- scrobbling/scrobblinglove.cpp: replaced mpc_o with cantata-mpc
+
 * Mon Apr 15 2024 12:17:29 +0530 Manvendra Bhangui <cantata@indimail.org> - 2.5.1-1
 - Scrobbling button fixes
 

@@ -30,5 +30,4 @@ hdiutil makehybrid -hfs -hfs-volume-name @MACOSX_BUNDLE_BUNDLE_NAME@ -hfs-openfo
 hdiutil convert -format UDZO -imagekey zlib-level=9 "$tempFile" -o "$dmgFileName"
 
 # Remove temporary files
-rm -rf "$tempFolder"
-rm -f "$tempFile"
+rm -rf "$tempFolder" "$tempFile" dmg

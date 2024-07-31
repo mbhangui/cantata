@@ -21,6 +21,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <stdlib.h>
 #include "scrobblinglove.h"
 #include "scrobbler.h"
 #include "support/monoicon.h"
@@ -45,15 +46,13 @@ ScrobblingLove::ScrobblingLove(QWidget *p)
 void ScrobblingLove::love_function()
 {
     if (toggle_love == 0) {
-        fprintf(stderr, "sendLove\n");
         Scrobbler::self()->love();
         toggle_love = 1;
-        system("mpc_o love");
+        system("cantata-mpc love");
     } else {
-        fprintf(stderr, "sendUnLove\n");
         Scrobbler::self()->unlove();
         toggle_love = 0;
-        system("mpc_o unlove");
+        system("cantata-mpc unlove");
     }
     scrobblerChanged();
 }

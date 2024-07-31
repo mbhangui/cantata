@@ -49,12 +49,12 @@ class UserNotificationItemClass
 public:
     UserNotificationItemClass() {
         item = [UserNotificationItem alloc];
-        if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 11, 0)) {
+        if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 10, 8)) {
             [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:item];
         }
     }
     ~UserNotificationItemClass() {
-        if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 11, 0)) {
+        if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 10, 8)) {
             [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:nil];
         }
         [item release];
@@ -64,7 +64,7 @@ public:
 
 void MacNotify::showMessage(const QString &title, const QString &text, const QImage &img)
 {
-    if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 11, 0)) {
+    if(QOperatingSystemVersion::current() < QOperatingSystemVersion(QOperatingSystemVersion::MacOS, 10, 8)) {
         static UserNotificationItemClass *n=0;
         if (!n) {
             n=new UserNotificationItemClass();
@@ -74,6 +74,8 @@ void MacNotify::showMessage(const QString &title, const QString &text, const QIm
         userNotification.title = title.toNSString();
         userNotification.informativeText = text.toNSString();
         CGImageRef cg = img.toCGImage();
+		if (cg == NULL)
+			return;
         NSImage *image = [[NSImage alloc] initWithCGImage:cg size:NSZeroSize];
         CFRelease(cg);
         userNotification.contentImage = image;

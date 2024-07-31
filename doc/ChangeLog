@@ -1,7 +1,5 @@
-* XXX XXX XX XXXX XX:XX:XX +0000 Manvendra Bhangui <@email@> @version@-@release@%{?dist}
-Release @version@-@release@ Start 27/04/2023 End XX/XX/XXXX
-======= Release Highlights ================================================
-===========================================================================
+* Wed Jul 31 2024 11:54:03 +0000 Manvendra Bhangui <cantata@indimail.org> 2.5.2-1.1%{?dist}
+Release 2.5.2-1.1 Start 27/04/2023 End 31/07/2024
 - 15/10/2023
 01. Fixed scrobbling button to allow love and unlove
 - 04/04/2024
@@ -12,3 +10,17 @@ Release @version@-@release@ Start 27/04/2023 End XX/XX/XXXX
 - 25/04/2024
 04. Added packaging files for debian, rpm packaging using Open Build Service
 05. Updated INSTALL, README files for building on MacOS
+- 28/07/2024
+06. mac/macnotify.mm: Fixed crash on macos when output device is changed
+07. mpd-interface/mpdconnections.h: fixed "Unsupported URI scheme" error
+    message in mpd log (incorrect lsinfo command)
+08. mpd-interface/mpdconnections.cpp: Increased constConnTimer value to 10000,
+    constSocketCommsTimeout to 4000, constConnTimer to 10000
+09. mpd-interface/mpdconnections.cpp: added constSocketDataTimeout=2000
+10. mpd-interface/mpdconnections.cpp: Changed [Radio Streams] to Radio-Streams
+11. mpd-interface/mpdconnections.cpp: Create MPD_HOST, MUSIC_DIR files in
+    $HOME/.config/cantata
+12. mpd-interface/mpdconnections.cpp: fixed multiple reconnects from power
+    management code
+13. mpd-interface/mpdconnections.cpp: removed dead code
+14. scrobbling/scrobblinglove.cpp: replaced mpc_o with cantata-mpc

@@ -23,7 +23,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QtMPC.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 #include "mpdconnection.h"
 #include "mpdparseutils.h"
 #include "models/streamsmodel.h"
@@ -63,11 +65,12 @@ void MPDConnection::enableDebug()
 
 // Uncomment the following to report error strings in MPDStatus to the UI
 // ...disabled, as stickers (for ratings) can cause lots of errors to be reported - and these all need clearing, etc.
-// #define REPORT_MPD_ERRORS
-static const int constSocketCommsTimeout=2000;
+#define REPORT_MPD_ERRORS
+static const int constSocketCommsTimeout=4000;
+static const int constSocketDataTimeout=2000;
 static const int constMaxReadAttempts=4;
 static const int constMaxFilesPerAddCommand=2000;
-static const int constConnTimer=5000;
+static const int constConnTimer=10000;
 
 static const QByteArray constOkValue("OK");
 static const QByteArray constOkMpdValue("OK MPD");
@@ -93,7 +96,7 @@ static const QByteArray constRatingSticker("rating");
 static inline int socketTimeout(int dataSize)
 {
     static const int constDataBlock=256;
-    return ((dataSize/constDataBlock)+((dataSize%constDataBlock) ? 1 : 0))*constSocketCommsTimeout;
+    return ((dataSize/constDataBlock)+((dataSize%constDataBlock) ? 1 : 0))*constSocketDataTimeout;
 }
 
 static QByteArray log(const QByteArray &data)
@@ -109,7 +112,7 @@ GLOBAL_STATIC(MPDConnection, instance)
 
 const QString MPDConnection::constModifiedSince=QLatin1String("modified-since");
 const int MPDConnection::constMaxPqChanges=1000;
-const QString MPDConnection::constStreamsPlayListName=QLatin1String("[Radio Streams]");
+const QString MPDConnection::constStreamsPlayListName=QLatin1String("Radio-Streams");
 const QString MPDConnection::constPlaylistPrefix=QLatin1String("playlist:");
 const QString MPDConnection::constDirPrefix=QLatin1String("dir:");
 
@@ -123,7 +126,7 @@ QByteArray MPDConnection::encodeName(const QString &name)
     return '\"'+name.toUtf8().replace("\\", "\\\\").replace("\"", "\\\"")+'\"';
 }
 
-static QByteArray readFromSocket(MpdSocket &socket, int timeout=constSocketCommsTimeout)
+static QByteArray readFromSocket(MpdSocket &socket, int timeout=constSocketDataTimeout)
 {
     QByteArray data;
     int attempt=0;
@@ -152,7 +155,7 @@ static QByteArray readFromSocket(MpdSocket &socket, int timeout=constSocketComms
     return data;
 }
 
-static MPDConnection::Response readReply(MpdSocket &socket, int timeout=constSocketCommsTimeout)
+static MPDConnection::Response readReply(MpdSocket &socket, int timeout=constSocketDataTimeout)
 {
     QByteArray data = readFromSocket(socket, timeout);
     return MPDConnection::Response(data.endsWith(constOkNlValue), data);
@@ -245,9 +248,31 @@ MPDConnectionDetails & MPDConnectionDetails::operator=(const MPDConnectionDetail
     return *this;
 }
 
+void
+writeDir(const char *dir)
+{
+
+	char *ptr;
+	char fn[128];
+	FILE *fp;
+
+	if (!(ptr = getenv("HOME")))
+		return;
+	snprintf(fn, sizeof(fn) - 1, "%s/.config/cantata", ptr);
+	if (access(fn, F_OK)) {
+		if (mkdir(fn, 0755) == -1)
+			return;
+	}
+	snprintf(fn, sizeof(fn) - 1, "%s/.config/cantata/MUSIC_DIR", ptr);
+	fp = fopen(fn, "w");
+	fprintf(fp, "%s\n", dir);
+	fclose(fp);
+}
+
 void MPDConnectionDetails::setDirReadable()
 {
     dirReadable=Utils::isDirReadable(dir);
+	writeDir(dir.toStdString().c_str());
 }
 
 MPDConnection::MPDConnection()
@@ -293,9 +318,6 @@ MPDConnection::MPDConnection()
     qRegisterMetaType<QMap<qint32, quint8> >("QMap<qint32, quint8>");
     qRegisterMetaType<Stream>("Stream");
     qRegisterMetaType<QList<Stream> >("QList<Stream>");
-    #if (defined Q_OS_LINUX && defined QT_QTDBUS_FOUND) || (defined Q_OS_MAC && defined IOKIT_FOUND)
-    connect(PowerManagement::self(), SIGNAL(resuming()), this, SLOT(reconnect()));
-    #endif
     MPDParseUtils::setSingleTracksFolders(Utils::listToSet(Configuration().get("singleTracksFolders", QStringList())));
 }
 
@@ -305,7 +327,6 @@ MPDConnection::~MPDConnection()
         sendCommand("stop");
         stopVolumeFade();
     }
-//     disconnect(&sock, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChanged(QAbstractSocket::SocketState)));
     disconnect(&idleSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChanged(QAbstractSocket::SocketState)));
     disconnect(&idleSocket, SIGNAL(readyRead()), this, SLOT(idleDataReady()));
     sock.disconnectFromHost();
@@ -349,6 +370,30 @@ bool MPDConnection::localFilePlaybackSupported() const
            (QLatin1String("127.0.0.1")==details.hostname || QLatin1String("localhost")==details.hostname));
 }
 
+void
+writeHost(const char *host)
+{
+
+	char *ptr;
+	char fn[128];
+	FILE *fp;
+
+	fprintf(stderr, "host=%s\n", host);
+	if (!host || !*host)
+		return;
+	if (!(ptr = getenv("HOME")))
+		return;
+	snprintf(fn, sizeof(fn) - 1, "%s/.config/cantata", ptr);
+	if (access(fn, F_OK)) {
+		if (mkdir(fn, 0755) == -1)
+			return;
+	}
+	snprintf(fn, sizeof(fn) - 1, "%s/.config/cantata/MPD_HOST", ptr);
+	fp = fopen(fn, "w");
+	fprintf(fp, "%s\n", host);
+	fclose(fp);
+}
+
 MPDConnection::ConnectionReturn MPDConnection::connectToMPD(MpdSocket &socket, bool enableIdle)
 {
     if (QAbstractSocket::ConnectedState!=socket.state()) {
@@ -370,8 +415,10 @@ MPDConnection::ConnectionReturn MPDConnection::connectToMPD(MpdSocket &socket, b
 
             if (recvdata.startsWith(constOkMpdValue)) {
                 DBUG << (void *)(&socket) << "Received identification string";
-            }
-
+            } else {
+                DBUG << (void *)(&socket) << "didn't get OK";
+                return Failed;
+			}
             lastUpdatePlayQueueVersion=lastStatusPlayQueueVersion=0;
             playQueueIds.clear();
             emit cantataStreams(QList<Song>(), false);
@@ -388,7 +435,7 @@ MPDConnection::ConnectionReturn MPDConnection::connectToMPD(MpdSocket &socket, b
             if (!details.password.isEmpty()) {
                 DBUG << (void *)(&socket) << "setting password...";
                 socket.write("password "+details.password.toUtf8()+'\n');
-                socket.waitForBytesWritten(constSocketCommsTimeout);
+                socket.waitForBytesWritten(constSocketDataTimeout);
                 if (!readReply(socket).ok) {
                     DBUG << (void *)(&socket) << "password rejected";
                     socket.close();
@@ -399,7 +446,7 @@ MPDConnection::ConnectionReturn MPDConnection::connectToMPD(MpdSocket &socket, b
             if (!details.partition.isEmpty()) {
                 DBUG << (void *)(&socket) << "setting partition...";
                 socket.write("partition "+encodeName(details.partition)+'\n');
-                socket.waitForBytesWritten(constSocketCommsTimeout);
+                socket.waitForBytesWritten(constSocketDataTimeout);
                 if (!readReply(socket).ok) {
                     DBUG << (void *)(&socket) << "partition rejected, staying on default";
                 }
@@ -414,6 +461,9 @@ MPDConnection::ConnectionReturn MPDConnection::connectToMPD(MpdSocket &socket, b
                 socket.write("idle\n");
                 socket.waitForBytesWritten();
             }
+#if (defined Q_OS_LINUX && defined QT_QTDBUS_FOUND) || (defined Q_OS_MAC && defined IOKIT_FOUND)
+		    connect(PowerManagement::self(), SIGNAL(resuming()), this, SLOT(reconnect()));
+#endif
             return Success;
         } else {
             DBUG << (void *)(&socket) << "Couldn't connect - " << socket.errorString() << socket.error();
@@ -421,7 +471,6 @@ MPDConnection::ConnectionReturn MPDConnection::connectToMPD(MpdSocket &socket, b
         }
     }
 
-//     DBUG << "Already connected" << (enableIdle ? "(idle)" : "(std)");
     return Success;
 }
 
@@ -633,6 +682,7 @@ void MPDConnection::setDetails(const MPDConnectionDetails &d)
             if (replaygainSupported() && details.applyReplayGain && !details.replayGain.isEmpty()) {
                 sendCommand("replay_gain_mode "+details.replayGain.toLatin1());
             }
+			writeHost(details.hostname.toStdString().c_str());
             serverInfo.detect();
             listPartitions();
             getStatus();
@@ -648,9 +698,6 @@ void MPDConnection::setDetails(const MPDConnectionDetails &d)
         default:
             emit stateChanged(false);
             emit error(errorString(status), true);
-            if (isInitialConnect) {
-                reconnect();
-            }
         }
     } else if (diffName) {
          emit stateChanged(true);
@@ -996,39 +1043,6 @@ void MPDConnection::move(quint32 from, quint32 to)
 void MPDConnection::move(const QList<quint32> &items, quint32 pos, quint32 size)
 {
     doMoveInPlaylist(QString(), items, pos, size);
-    #if 0
-    QByteArray send = "command_list_begin\n";
-    QList<quint32> moveItems;
-
-    moveItems.append(items);
-    std::sort(moveItems.begin(), moveItems.end());
-
-    int posOffset = 0;
-
-    //first move all items (starting with the biggest) to the end so we don't have to deal with changing rownums
-    for (int i = moveItems.size() - 1; i >= 0; i--) {
-        if (moveItems.at(i) < pos && moveItems.at(i) != size - 1) {
-            // we are moving away an item that resides before the destinatino row, manipulate destination row
-            posOffset++;
-        }
-        send += "move ";
-        send += quote(moveItems.at(i));
-        send += " ";
-        send += quote(size - 1);
-        send += '\n';
-    }
-    //now move all of them to the destination position
-    for (int i = moveItems.size() - 1; i >= 0; i--) {
-        send += "move ";
-        send += quote(size - 1 - i);
-        send += " ";
-        send += quote(pos - posOffset);
-        send += '\n';
-    }
-
-    send += "command_list_end";
-    sendCommand(send);
-    #endif
 }
 
 void MPDConnection::setOrder(const QList<quint32> &items)
@@ -2374,6 +2388,7 @@ QStringList MPDConnection::getAllFiles(const QString &dir)
     if (response.ok) {
         QStringList subDirs;
         QList<Song> songs;
+		writeDir(dir.toStdString().c_str());
         MPDParseUtils::parseDirItems(response.data, details.dir, ver, songs, dir, subDirs, MPDParseUtils::Loc_Browse);
         for (const Song &song: songs) {
             if (Song::Playlist!=song.type) {
@@ -2393,7 +2408,7 @@ bool MPDConnection::checkRemoteDynamicSupport()
     if (ver>=CANTATA_MAKE_VERSION(0,17,0)) {
         Response response;
         if (-1!=idleSocket.write("channels\n")) {
-            idleSocket.waitForBytesWritten(constSocketCommsTimeout);
+            idleSocket.waitForBytesWritten(constSocketDataTimeout);
             response=readReply(idleSocket);
             if (response.ok) {
                 return Utils::listToSet(MPDParseUtils::parseList(response.data, QByteArray("channel: "))).contains(constDynamicIn);
@@ -2406,7 +2421,7 @@ bool MPDConnection::checkRemoteDynamicSupport()
 bool MPDConnection::subscribe(const QByteArray &channel)
 {
     if (-1!=idleSocket.write("subscribe \""+channel+"\"\n")) {
-        idleSocket.waitForBytesWritten(constSocketCommsTimeout);
+        idleSocket.waitForBytesWritten(constSocketDataTimeout);
         Response response=readReply(idleSocket);
         if (response.ok || response.data.startsWith("ACK [56@0]")) { // ACK => already subscribed...
             DBUG << "Created subscription to " << channel;
@@ -2441,7 +2456,7 @@ void MPDConnection::setupRemoteDynamic()
 void MPDConnection::readRemoteDynamicMessages()
 {
     if (-1!=idleSocket.write("readmessages\n")) {
-        idleSocket.waitForBytesWritten(constSocketCommsTimeout);
+        idleSocket.waitForBytesWritten(constSocketDataTimeout);
         Response response=readReply(idleSocket);
         if (response.ok) {
             MPDParseUtils::MessageMap messages=MPDParseUtils::parseMessages(response.data);

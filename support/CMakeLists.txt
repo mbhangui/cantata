@@ -3,7 +3,7 @@ set(SUPPORT_CORE_SRCS utils.cpp thread.cpp)
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${QTINCLUDES})
 
 add_library(support-core STATIC ${SUPPORT_CORE_SRCS})
-    
+
 set (SUPPORT_SRCS icon.cpp fancytabwidget.cpp messagewidget.cpp buddylabel.cpp action.cpp actioncollection.cpp lineedit.cpp
      configuration.cpp gtkstyle.cpp spinner.cpp messagebox.cpp inputdialog.cpp thread.cpp squeezedtextlabel.cpp proxystyle.cpp
      pagewidget.cpp combobox.cpp configdialog.cpp monoicon.cpp)

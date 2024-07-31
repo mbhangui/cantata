@@ -9,6 +9,40 @@ Build & Installation
 4. make
 5. sudo make install
 
+# mac
+The following steps are used to compile Cantata, and create the OS X application
+bundle.
+
+These steps assume the following structure:
+
+    src/
+    build/
+    install/
+
+1. Install HomeBrew / macports
+
+2. brew install cmake taglib ffmpeg openssl avahi qt5
+   or
+   port install cmake taglib ffmpeg openssl avahi qt5
+
+3. Create the icon
+
+    cd src/mac
+    ./createicon.sh
+
+4.  Build
+    cd build
+    export Qt5_DIR="/opt/local/libexec/qt5/lib/cmake"
+    cmake -S "../src" -B "./" -DCMAKE_INSTALL_PREFIX="../install" -DENABLE_TAGLIB=ON -DCMAKE_PREFIX_PATH="/opt/local/libexec/qt5/;/opt/local/lib/cmake/Qt5Widgets" -DCMAKE_BUILD_TYPE=Release
+    make
+    make install
+
+5. Create Installer
+
+   1. Go into the 'mac' folder within the build folder
+
+   2. Run ./create-dmg.sh
+
 Dependencies
 ============
 

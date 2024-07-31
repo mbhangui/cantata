@@ -184,9 +184,7 @@ public:
 
     MPDServerInfo() {
         reset();
-        lsinfoCommand = "lsinfo \"mpd-client://cantata/";
-        lsinfoCommand += PACKAGE_VERSION_STRING;
-        lsinfoCommand += "\"";
+        lsinfoCommand = "lsinfo";
     };
 
     void reset();
