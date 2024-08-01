@@ -2943,33 +2943,33 @@ If this search does find new lyrics, these will still be associated with the ori
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1931"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1934"/>
         <source>Failed to rename &lt;b&gt;%1&lt;/b&gt; to &lt;b&gt;%2&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1946"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1949"/>
         <source>Failed to save &lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1959"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1962"/>
         <source>You cannot add parts of a cue sheet to a playlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="1962"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="1965"/>
         <source>You cannot add a playlist to another playlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="2217"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="2220"/>
         <source>Failed to send &apos;%1&apos; to %2. Please check %2 is registered with MPD.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="2507"/>
-        <location filename="../mpd-interface/mpdconnection.cpp" line="2534"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="2510"/>
+        <location filename="../mpd-interface/mpdconnection.cpp" line="2537"/>
         <source>Cannot store ratings, as the &apos;sticker&apos; MPD command is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
