@@ -1,4 +1,5 @@
 install(FILES ${MACOSX_BUNDLE_ICON_FILE} DESTINATION ${MACOSX_BUNDLE_RESOURCES})
+install(FILES cantata.sh DESTINATION ${MACOSX_BUNDLE_APP_DIR})
 
 # Qt translation files...
 file(GLOB qt_trans ${QT_TRANSLATIONS_DIR}/qt_*.qm)

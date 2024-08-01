@@ -19,6 +19,7 @@ cp @CMAKE_CURRENT_SOURCE_DIR@/mac/dmg/background.png "$tempFolder/.background/ba
 cp @CMAKE_CURRENT_SOURCE_DIR@/mac/dmg/DS_Store.in "$tempFolder/.DS_Store"
 chmod go-rwx "$tempFolder/.DS_Store"
 ln -s /Applications "$tempFolder/Applications"
+chmod +x "@CMAKE_INSTALL_PREFIX@/@MACOSX_BUNDLE_BUNDLE_NAME@.app/Contents/MacOS/${MACOSX_BUNDLE_SCRIPT}"
 cp -R "@CMAKE_INSTALL_PREFIX@/@MACOSX_BUNDLE_BUNDLE_NAME@.app" "$tempFolder"
 
 # Replace the code signatures after they were invalidated by install_name_tool

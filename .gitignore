@@ -1,4 +1,5 @@
 /.project
 build/
+mac/cantata.icns
 CMakeLists.txt.user
 *.BAK
