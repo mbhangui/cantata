@@ -37,7 +37,7 @@ jobs:
           mkdir /Users/runner/work/cantata/install
           cd /Users/runner/work/cantata/build
           export Qt5_DIR="/usr/local/opt/qt@5/lib/cmake"
-          /usr/local/bin/cmake -S "/Users/runner/work/cantata/cantata" -B "/Users/runner/work/cantata/build" -DCMAKE_INSTALL_PREFIX="/Users/runner/work/cantata/install" -DENABLE_TAGLIB=ON -DCMAKE_PREFIX_PATH="/usr/local/opt/qt@5/;/usr/local/opt/qt@5/lib/cmake/Qt5Widgets/" -DCMAKE_BUILD_TYPE=Release
+          cmake -S "/Users/runner/work/cantata/cantata" -B "/Users/runner/work/cantata/build" -DCMAKE_INSTALL_PREFIX="/Users/runner/work/cantata/install" -DENABLE_TAGLIB=ON -DCMAKE_PREFIX_PATH="/usr/local/opt/qt@5/;/usr/local/opt/qt@5/lib/cmake/Qt5Widgets/" -DCMAKE_BUILD_TYPE=Release
           make
           make install
           cd /Users/runner/work/cantata/build/mac
