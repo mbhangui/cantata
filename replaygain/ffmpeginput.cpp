@@ -281,7 +281,11 @@ size_t FfmpegInput::totalFrames() const
 
 unsigned int FfmpegInput::channels() const
 {
+#if LIBAVFORMAT_VERSION_MAJOR <= 58
+    return handle ? handle->codecContext->channels : 0;
+#else
     return handle ? handle->codecContext->ch_layout.nb_channels : 0;
+#endif
 }
 
 unsigned long FfmpegInput::sampleRate() const
@@ -296,11 +300,20 @@ float * FfmpegInput::buffer() const
 
 bool FfmpegInput::setChannelMap(int *st) const
 {
+#if LIBAVFORMAT_VERSION_MAJOR <= 58
+    if (handle && handle->codecContext->channel_layout) {
+#else
     if (handle && handle->codecContext->ch_layout.u.mask) {
+#endif
         unsigned int mapIndex = 0;
         int bitCounter = 0;
+#if LIBAVFORMAT_VERSION_MAJOR <= 58
+        while (mapIndex < (unsigned) handle->codecContext->channels) {
+            if (handle->codecContext->channel_layout & (1 << bitCounter)) {
+#else
         while (mapIndex < (unsigned) handle->codecContext->ch_layout.nb_channels) {
             if (handle->codecContext->ch_layout.u.mask & (1 << bitCounter)) {
+#endif
                 switch (1 << bitCounter) {
                 #if LIBAVFORMAT_VERSION_MAJOR >= 54
                 case AV_CH_FRONT_LEFT:
@@ -469,8 +482,11 @@ free_packet:
 
 write_to_buffer: ;
     size_t numberRead=handle->frame->nb_samples;
-    /* TODO: fix this */
+#if LIBAVFORMAT_VERSION_MAJOR <= 58
+    int numChannels = handle->codecContext->channels;
+#else
     int numChannels = handle->codecContext->ch_layout.nb_channels;
+#endif
     // channels = handle->frame->channels;
 
     if (handle->frame->nb_samples * numChannels > (int)sizeof handle->buffer) {
