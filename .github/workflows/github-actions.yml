@@ -1,14 +1,9 @@
 on:
-  push:
-    branches:
-      - github-actions
+  workflow_dispatch:
 
 jobs:
-
   Mac-OS-build:
-
     runs-on: macos-latest
-
     steps:
 
       - run: echo "Job was triggered by a ${{ github.event_name }} event."
