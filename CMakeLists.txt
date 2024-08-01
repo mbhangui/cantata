@@ -217,6 +217,9 @@ endif ()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wpedantic -Wall -Wextra \
     -Wno-cast-qual -Wno-float-equal \
 	-Wno-reorder -Wno-implicit-fallthrough -Wno-unused-parameter \
+	-Wno-unused-variable -Wno-unused-private-field -Wno-mismatched-tags \
+	-Wno-deprecated-declarations -Wno-unused-function \
+	-Wno-unused-but-set-variable \
     -Wmissing-format-attribute -Wpacked -Wredundant-decls")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
