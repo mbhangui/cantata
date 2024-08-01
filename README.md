@@ -30,10 +30,6 @@ A graphical (Qt5) client for MPD, supporting the following features:
 Cantata started off as a fork of QtMPC, however, the code (and user interface) is now *very* different to that of QtMPC.
 For more detailed information, please refer to the main [README](https://raw.githubusercontent.com/CDrummond/cantata/master/README)
 
+# Downloads
 
-## Donations
-
-I develop Cantata purely for fun, so no donations are required. However, seeing as I have been asked about this a few times, here is a link...
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2X2CTDUH27V9L&source=url)
-
+I use this version of cantata on my macbook, mac mini, Raspberry PIs and a Fedora laptop. I have also built a streamer, based on a Raspberry PI, with a LCD screen attached. I use Cantata on this raspberry PI to control Music playback on my Stereo Amplifier and a 7.1 AVR. On this raspberry PI, I use LIRC with an IR remote to control Cantata. You can download this version of cantata for Few of the Linux distributions (Debian, Fedora, Raspbian, Ubuntu) from [open build service](https://software.opensuse.org//download.html?project=home%3Ambhangui%3Araspi&package=cantata). I do have the same version built for MacOS (built on Sonoma), but not sure where and how to upload it to github. I do not have any windows machine and neither have much knowledge of windows. I haven't yet seen a better mpd client than Cantata and would hate to see it dead and hence I have decided to keep it alive as long as I can.

@@ -1,14 +1,18 @@
 cantata (2.5.2-1.1) UNRELEASED; urgency=medium
 
- * mac/macnotify.mm: Fixed crash on macos when output device is changed
- * mpd-interface/mpdconnections.h: fixed "Unsupported URI scheme" error message in mpd log (incorrect lsinfo command)
- * mpd-interface/mpdconnections.cpp: Increased constConnTimer value to 10000, constSocketCommsTimeout to 4000, constConnTimer to 10000
- * mpd-interface/mpdconnections.cpp: added constSocketDataTimeout=2000
- * mpd-interface/mpdconnections.cpp: Changed [Radio Streams] to Radio-Streams
- * mpd-interface/mpdconnections.cpp: Create MPD_HOST, MUSIC_DIR files in $HOME/.config/cantata
- * mpd-interface/mpdconnections.cpp: fixed multiple reconnects from power management code
- * mpd-interface/mpdconnections.cpp: removed dead code
- * scrobbling/scrobblinglove.cpp: replaced mpc_o with cantata-mpc
+  * mac/macnotify.mm: Fixed crash on macos when output device is changed
+  * mpd-interface/mpdconnections.h: fixed "Unsupported URI scheme" error message in mpd log (incorrect lsinfo command)
+  * mpd-interface/mpdconnections.cpp: Increased constConnTimer value to 10000, constSocketCommsTimeout to 4000, constConnTimer to 10000
+  * mpd-interface/mpdconnections.cpp: added constSocketDataTimeout=2000
+  * mpd-interface/mpdconnections.cpp: Changed [Radio Streams] to Radio-Streams
+  * mpd-interface/mpdconnections.cpp: Create MPD_HOST, MUSIC_DIR files in $HOME/.config/cantata
+  * mpd-interface/mpdconnections.cpp: fixed multiple reconnects from power management code
+  * mpd-interface/mpdconnections.cpp: removed dead code
+  * scrobbling/scrobblinglove.cpp: replaced mpc_o with cantata-mpc
+  * ffmpeginput.cpp: fix compilation for libavutil old channel layout
+  * ffmpeginput.cpp: updated for new channel layout
+  * gui/playbacksettings.cpp, gui/playbacksettings.ui, gui/settings.cpp, gui/settings.h, mpd-interface/mpdconnection.cpp: Unhardcode duration after which prev button seeks to start of audio
+  * Add options to move tracks at beginning and end of playqueue
 
  -- Manvendra Bhangui <cantata@indimail.org>  Wed, 31 Jul 2024 11:54:03 +0530
 

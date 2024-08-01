@@ -34,7 +34,7 @@ set(CPACK_PACKAGE_VERSION_MINOR "5")
 set(CPACK_PACKAGE_VERSION_PATCH "2")
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_PACKAGE_VERSION_SPIN "")  # Use ".$number" - e.g. ".1"
-set(CPACK_PACKAGE_CONTACT "Manvendra Bhangi <cantata@indimail.org>")
+set(CPACK_PACKAGE_CONTACT "Manvendra Bhangui <cantata@indimail.org>")
 set(CANTATA_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
 set(CANTATA_VERSION_FULL "${CANTATA_VERSION}.${CPACK_PACKAGE_VERSION_PATCH}")
 set(CANTATA_VERSION_WITH_SPIN "${CANTATA_VERSION_FULL}${CPACK_PACKAGE_VERSION_SPIN}")
@@ -220,7 +220,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wpedantic -Wall -Wextra \
 	-Wno-reorder -Wno-implicit-fallthrough -Wno-unused-parameter \
 	-Wno-unused-variable -Wno-unused-private-field -Wno-mismatched-tags \
 	-Wno-deprecated-declarations -Wno-unused-function \
-	-Wno-unused-but-set-variable \
+	-Wno-unused-but-set-variable -Wno-unused-result \
     -Wmissing-format-attribute -Wpacked -Wredundant-decls")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
