@@ -24,7 +24,7 @@ GenericName[sq]=Clienti player muzike
 GenericName[tr]=Muzik Çalıcı İstemcisi
 Comment=Listen and manage music collection
 Icon=cantata
-Exec=QT_QPA_PLATFORMTHEME=gnome cantata %U
+Exec=cantata %U
 Categories=Qt;KDE;AudioVideo;Player;
 X-DBUS-StartupType=Unique
 X-DBUS-ServiceName=mpd.cantata
