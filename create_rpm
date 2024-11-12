@@ -94,6 +94,8 @@ if [ $copy_src -eq 1 ] ; then
 		-cf - cantata-"$version" \
 		| bzip2 -c > $rpmbuild/SOURCES/cantata-"$version".tar.bz2
 	/bin/rm -rf cantata-"$version"
+	cp com.github.cdrummond.cantata.metainfo.xml cantata-unbundle-fontawesome.patch \
+		cantata-unbundle-qtiocompressor.patch $rpmbuild/SOURCES
 fi
 
 dist=`uname -r |cut -d . -f4`

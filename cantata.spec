@@ -49,7 +49,10 @@ Patch1:  %{name}-unbundle-qtiocompressor.patch
 BuildRequires: appstream
 BuildRequires: cmake
 BuildRequires: desktop-file-utils
-BuildRequires: ffmpeg-free-devel
+BuildRequires: libavcodec-free-devel
+BuildRequires: libavformat-free-devel
+BuildRequires: libavutil-free-devel
+BuildRequires: vlc-devel
 BuildRequires: gcc-c++
 BuildRequires: gettext
 BuildRequires: pkgconfig(phonon4qt5)

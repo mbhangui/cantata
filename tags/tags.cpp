@@ -1455,7 +1455,7 @@ Song read(const QString &fileName)
 
     readTags(fileref, &song, nullptr, nullptr, nullptr, nullptr);
     song.file=fileName;
-    song.time=fileref.audioProperties() ? fileref.audioProperties()->length() : 0;
+    song.time=fileref.audioProperties() ? fileref.audioProperties()->lengthInSeconds() : 0;
     return song;
 }
 
