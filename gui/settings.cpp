@@ -523,6 +523,11 @@ bool Settings::playQueueSearch()
     return cfg.get("playQueueSearch", true);
 }
 
+bool Settings::playQueueSimpleSort()
+{
+    return cfg.get("playQueueSimpleSort", false);
+}
+
 bool Settings::playListsStartClosed()
 {
     return cfg.get("playListsStartClosed", true);
@@ -1021,6 +1026,11 @@ void Settings::savePlayQueueConfirmClear(bool v)
 void Settings::savePlayQueueSearch(bool v)
 {
     cfg.set("playQueueSearch", v);
+}
+
+void Settings::savePlayQueueSimpleSort(bool v)
+{
+    cfg.set("playQueueSimpleSort", v);
 }
 
 void Settings::savePlayListsStartClosed(bool v)

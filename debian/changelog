@@ -1,3 +1,8 @@
+cantata (2.5.3-1.1) UNRELEASED; urgency=medium
+  * Option to sort only one one specific tag
+
+ -- Manvendra Bhangui <cantata@indimail.org>  Thu, 09 Jan 2025 21:31:20 +0530
+
 cantata (2.5.2-1.1) UNRELEASED; urgency=medium
 
   * mac/macnotify.mm: Fixed crash on macos when output device is changed

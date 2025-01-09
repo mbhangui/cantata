@@ -88,12 +88,13 @@ if [ $copy_src -eq 1 ] ; then
 	# /usr/local/src/stage/
 	cd ..
 	echo "Archiving cantata-"$version".tar.bz2 in `pwd`"
-	tar \
-		--exclude="cantata-$version/.git" \
-		--exclude="cantata-$version/debian"  \
-		-cf - cantata-"$version" \
-		| bzip2 -c > $rpmbuild/SOURCES/cantata-"$version".tar.bz2
+	#tar \
+	#	--exclude="cantata-$version/.git" \
+	#	--exclude="cantata-$version/debian"  \
+	#	-cf - cantata-"$version" \
+	#	| bzip2 -c > $rpmbuild/SOURCES/cantata-"$version".tar.bz2
 	/bin/rm -rf cantata-"$version"
+	cd ../cantata
 	cp com.github.cdrummond.cantata.metainfo.xml cantata-unbundle-fontawesome.patch \
 		cantata-unbundle-qtiocompressor.patch $rpmbuild/SOURCES
 fi

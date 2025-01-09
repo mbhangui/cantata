@@ -1,7 +1,7 @@
 
 Name:    cantata
 Summary: Music Player Daemon (MPD) graphical client
-Version: 2.5.2
+Version: 2.5.3
 Release: 1.1%{?dist}
 
 # Most files in this project are GPL-2.0-or-later.  Exceptions:
