@@ -20,14 +20,17 @@ Release 2.5.2-1.1 Start 27/04/2023 End 31/07/2024
 10. mpd-interface/mpdconnections.cpp: Changed [Radio Streams] to Radio-Streams
 11. mpd-interface/mpdconnections.cpp: Create MPD_HOST, MUSIC_DIR files in
     $HOME/.config/cantata
-12. mpd-interface/mpdconnections.cpp: fixed multiple reconnects from power
+12. playlists/dynamicplaylists.cpp: Create MPD_HOST env variable
+13. mpd-interface/mpdconnections.cpp: fixed multiple reconnects from power
     management code
-13. mpd-interface/mpdconnections.cpp: removed dead code
-14. scrobbling/scrobblinglove.cpp: replaced mpc_o with cantata-mpc
+14. mpd-interface/mpdconnections.cpp: removed dead code
+15. scrobbling/scrobblinglove.cpp: replaced mpc_o with cantata-mpc
 - 01/08/2024
-15. ffmpeginput.cpp: fix compilation for libavutil old channel layout
-16. ffmpeginput.cpp: updated for new channel layout
-15. gui/playbacksettings.cpp, gui/playbacksettings.ui, gui/settings.cpp,
+16. ffmpeginput.cpp: fix compilation for libavutil old channel layout
+17. ffmpeginput.cpp: updated for new channel layout
+18. gui/playbacksettings.cpp, gui/playbacksettings.ui, gui/settings.cpp,
     gui/settings.h, mpd-interface/mpdconnection.cpp: Unhardcode duration after
     which prev button seeks to start of audio
-15. Add options to move tracks at beginning and end of playqueue
+19. Add options to move tracks at beginning and end of playqueue
+- 16/08/2024
+20. added scrobbling.md, aux-scripts directory

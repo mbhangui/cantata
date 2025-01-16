@@ -1,0 +1,126 @@
+#!/bin/sh
+#
+# This scripts creates two services for cantata
+#
+# 1. notify-screen service that displays a pop-up with song
+#    details like title, artist, rating, last_played, last_updated,
+#    play count, karma value, date added, etc whenever a new song plays
+# 2. scrobble-button service that syncs the status of 'love'
+#    scrobble button on all players connected to the same host
+#    as the cantata player
+#
+# this requires you to install daemontools package
+#
+servicedir=/service
+logdir=/var/log/svc
+
+create_notify_screen_service()
+{
+	user=$(getent passwd 1000 | awk -F: '{print $1}')
+	mkdir -p $servicedir/notify-screen/log
+
+	(
+	echo "#!/bin/sh"
+	echo "#"
+	echo "# This requires yad to be installed."
+	echo "# Look at \$home/bin/notify-screen"
+	echo "#"
+	echo "user=$user"
+	echo "home=\$(getent passwd \$user | awk -F: '{print \$6}')"
+	echo "exec 2>&1"
+	echo "mkdir -p /run/notify-screen"
+	echo "if [ ! -f \$home/.config/cantata/MPD_HOST ] ; then"
+	echo "  echo \"MPD_HOST not defined\" 1>&2"
+	echo "  sleep 30"
+	echo "  exit 1"
+	echo "fi"
+	echo "chown \$user /run/notify-screen"
+	echo "if [ -d /run/svscan/scrobble-button/supervise ] ; then"
+	echo "  chown -R \$user /run/svscan/scrobble-button/supervise"
+	echo "elif [ -d /svscan/scrobble-button/supervise ] ; then"
+	echo "  chown -R \$user /svscan/scrobble-button/supervise"
+	echo "fi"
+	echo "if [ -d /run/svscan/notify-screen/supervise ] ; then"
+	echo "  chown -R \$user /run/svscan/notify-screen/supervise"
+	echo "elif [ -d /svscan/notify-screen/supervise ] ; then"
+	echo "  chown -R \$user /svscan/notify-screen/supervise"
+	echo "fi"
+	echo "/usr/bin/setuidgid -s \$user /usr/bin/envdir variables xhost +"
+	echo "exec /usr/bin/setuidgid -s \$user /usr/bin/envdir variables \$home/bin/notify-screen"
+	) > $servicedir/notify-screen/run
+	chmod +x $servicedir/notify-screen/run
+
+	(
+	echo "#!/bin/sh"
+	echo "exec /usr/bin/setuidgid qmaill \\"
+	echo "/usr/sbin/multilog t $logdir/notify-screen"
+	) > $servicedir/notify-screen/log/run
+	chmod +x $servicedir/notify-screen/log/run
+
+	(
+	echo "#!/bin/sh"
+	echo "if [ -f /run/notify-screen/lock ] ; then"
+	echo "  pid=\$(cat /run/notify-screen/lock)"
+	echo "  kill -0 \$pid 2>/dev/null"
+	echo "  if [ \$? -eq 0 ] ; then"
+	echo "    for i in \$(cat /proc/\$pid/task/\$pid/children)"
+	echo "    do"
+	echo "      for j in \$(cat /proc/\$i/task/\$i/children)"
+	echo "      do"
+	echo "        echo \"shutdown: Killing pid \$j\""
+	echo "        kill -9 \$i"
+	echo "      done"
+	echo "      echo \"shutdown: Killing pid \$i\""
+	echo "      kill -9 \$i"
+	echo "    done"
+	echo "    echo \"shutdown: Terminating pid=\$pid\""
+	echo "    kill -9 \$pid"
+	echo "  fi"
+	echo "fi"
+	echo ""
+	echo "if [ -f /run/notify-screen/home ] ; then"
+	echo "  home=\$(cat /run/notify-screen/home)"
+	echo "  echo \"shutdown: pkill -f inotify -n \$home/.config/cantata\""
+	echo "  pkill -f \"inotify -n \$home/.config/cantata\""
+	echo "fi"
+	echo "echo \"shutdown: Terminating scrobble-button\""
+	echo "if [ -d /service/scrobble-button ] ; then"
+	echo "  svc -d /service/scrobble-button"
+	echo "fi"
+	echo "echo \"shutdown: Terminating notify-screen\""
+	echo "exec killall -9 notify-screen"
+	) > $servicedir/notify-screen/shutdown
+	chmod +x $servicedir/notify-screen/shutdown
+}
+
+create_scrobble_button_service()
+{
+	mkdir -p $servicedir/scrobble-button/log
+	user=$(getent passwd 1000 | awk -F: '{print $1}')
+	home=$(getent passwd 1000 | awk -F: '{print $6}')
+
+	(
+	echo "#!/bin/sh"
+	echo "user=$user"
+	echo "home=$home"
+	echo "exec 2>&1"
+	echo "exec /usr/bin/setuidgid -s \$user env HOME=\$home \$home/bin/scrobble-button"
+	) > $servicedir/scrobble-button/run
+	chmod +x $servicedir/scrobble-button/run
+	(
+	echo "#!/bin/sh"
+	echo "exec /usr/bin/setuidgid qmaill \\"
+	echo "/usr/sbin/multilog t $logdir/scrobble-button"
+	) > $servicedir/scrobble-button/log/run
+	chmod +x $servicedir/scrobble-button/log/run
+
+	(
+	echo "#!/bin/sh"
+	echo "exec kill -9 \$(pgrep -P \$PPID |grep -v \$\$)"
+	) > $servicedir/scrobble-button/shutdown
+	chmod +x $servicedir/scrobble-button/shutdown
+}
+
+mkdir -p $servicedir/notify-screen
+create_notify_screen_service
+create_scrobble_button_service

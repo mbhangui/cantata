@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# This script requires mpc and mpdev package to be installed
+#
+karma=$(which karma)
+if [ $# -eq 0 ] ; then
+	echo "USAGE: $0 args" 1>&2
+	exit 1
+fi
+if [ -f $HOME/.config/cantata/MPD_HOST ] ; then
+	MPD_HOST=$(cat $HOME/.config/cantata/MPD_HOST)
+elif [ ! -f /etc/mpd.conf ] ; then
+	echo "$HOME/.config/cantata/MPD_HOST: No such file or directory" 1>&2
+	exit 1
+fi
+if [ -z "$MPD_HOST" ] ; then
+	echo "using localhost for MPD_HOST" 1>&2
+fi
+echo "mpc [host=$MPD_HOST] args=$*" 1>&2
+if [ "$1" = "rating" ] ; then
+	case $2 in
+		[0-9]|10) # numeric (0-9) key on remote
+		[ -n "$MPD_HOST" ] && uri=$(mpc --host="$MPD_HOST" -f '%file%' current) || uri=$(mpc -f '%file%' current)
+		if [ -n "$uri" ] ; then
+			if [ -n "$2" -a $2 -ge 0 -a $2 -le 10 ] ; then
+				[ -n "$MPD_HOST" ] && echo "mpc --host=$MPD_HOST sticker "$uri" set rating $2" 1>&2 || echo "mpc sticker $uri set rating $2" 1>&2
+				[ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" sticker "$uri" set rating $2 || mpc sticker "$uri" set rating $2
+			else
+				echo "mpc_rating: invalid rating=$rating" 1>&2
+			fi
+		else
+			echo "mpc_rating: uri is null" 1>&2
+		fi
+		;;
+	esac
+elif [ "$1" = "love" ] ; then
+	[ -n "$MPD_HOST" ] && echo "MPD_HOST=$MPD_HOST $karma --love" 1>&2 || echo "$karma --love" 1>&2
+	[ -n "$MPD_HOST" ] && MPD_HOST=$MPD_HOST $karma --love || $karma --love
+	[ -n "$MPD_HOST" ] && echo "mpc --host=$MPD_HOST sendmessage scrobble love" 1>&2 || echo "mpc sendmessage scrobble love" 1>&2
+	[ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" sendmessage scrobble love || mpc sendmessage scrobble love
+elif [ "$1" = "unlove" ] ; then
+	[ -n "$MPD_HOST" ] && echo "MPD_HOST=$MPD_HOST $karma --unlove" 1>&2 || echo "$karma --unlove" 1>&2
+	[ -n "$MPD_HOST" ] && MPD_HOST=$MPD_HOST $karma --unlove || $karma --unlove
+	[ -n "$MPD_HOST" ] && echo "mpc --host=$MPD_HOST sendmessage scrobble unlove" 1>&2 || echo "mpc sendmessage scrobble unlove" 1>&2
+	[ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" sendmessage scrobble unlove || mpc sendmessage scrobble unlove
+elif [ "$1" = "shutdown" ] ; then
+	if [ -f $HOME/.config/cantata/MPD_HOST ] ; then
+		ssh pi@$MPD_HOST sudo /sbin/shutdown -h now
+	fi
+	exec sudo /sbin/shutdown -h now
+elif [ "$1" = "single" ] ; then
+	if [ ! -f /tmp/single.count ] ; then
+		first=1
+		echo 1> /tmp/single.count
+	else
+		/bin/rm /tmp/single.count
+		first=0
+	fi
+	if [ $first -eq 1 ] ; then
+		is_on=$([ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" status | grep single|awk '{print $7}' || mpc status | grep single|awk '{print $7}')
+		if [ "$is_on" = "on" ] ; then
+			[ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" single off || mpc single off
+		elif [ "$is_on" = "off" ] ; then
+			[ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" single on || mpc single on
+		fi
+	fi
+else
+	[ -n "$MPD_HOST" ] && echo "mpc --host=$MPD_HOST $*" 1>&2 || echo "mpc $*" 1>&2
+	[ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" $* || mpc $*
+fi

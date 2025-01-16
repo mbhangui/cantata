@@ -1,0 +1,462 @@
+#!/bin/sh
+#
+# install mpc, sqlite3, imagemagick, yad, xmllint, mpdev, daemontools and
+# ucspi-tcp packages
+# update /etc/ImageMagick-6/policy.xml the following line
+# to have read|write
+# <policy domain="path" rights="read|write" pattern="@*"/>
+# You can configure this service by setting the following env
+# variables
+#
+# TITLE
+# WIDTH
+# HEIGHT
+# FONT
+# FONT_SIZE
+# TIMEOUT
+# BGCOLOUR
+# LASTFMUSER
+#
+# If you are using supervise from daemontools package then you
+# just need to create files in /service/notify-screen/variables
+# with the name of the environment variable
+# e.g. If last.fm user is mbhangui then
+# echo mbhangui > /service/notify-screen/variables/LASTFMUSER
+#
+
+width=684
+height=250
+timeout=20
+title="Manvendra's PI Streamer"
+# font=/usr/share/fonts/liberation-mono/LiberationMono-Regular.ttf # on fedora
+font=/usr/share/fonts/truetype/liberation2/LiberationMono-Regular.ttf # on raspberry pi
+font_size=12
+#background_colour="#F0C01E"
+background_colour="#FFF9E5"
+SCHEMA="https"
+API_URL="ws.audioscrobbler.com/2.0"
+user=$(whoami)
+rundir=/run/notify-screen
+servicedir=/service
+lastfmuser=mbhangui
+LIMIT=1
+
+suicide()
+{
+	echo "$$: ARGH!!! Committing suicide on SIGTERM" 1>&2
+	if [ -n "$!" ] ; then
+		echo "$$: Killing background pid $!" 1>&2
+		kill $!
+	fi
+	exit 111
+}
+
+song_info()
+{
+	turi=`echo "$1"|sed -e "s{'{''{g"`
+	# we don't handle stream uri currently
+	echo $1|grep -E "^http:|^https:" > /dev/null
+	if [ $? -eq 0 ] ; then
+		echo "$$: Streaming $1"
+		return 1
+	fi
+	out2=$(mktemp -t song-infoXXXXXX)
+	if [ -z "$out2" ] ; then
+		echo "$$: song_info: failed to create temporary file" 1>&2
+		return 1
+	fi
+	Q="SELECT title,play_count,last_played,"
+	Q="$Q rating, karma, duration,"
+	Q="$Q artist, album, date,"
+	Q="$Q datetime(date_added, 'unixepoch', 'localtime'),"
+	Q="$Q datetime(last_modified, 'unixepoch', 'localtime')"
+	Q="$Q FROM song WHERE uri='$turi';"
+	count=0
+	/bin/rm -f $rundir/SONG_INFO
+	while true
+	do
+		$sqlite -noheader -line -batch $stats_file "$Q"|sed \
+			-e 's{.*datetime(date_added.*){  Date Added{g' \
+			-e 's{.*datetime(last_modified.*){Last Updated{g' \
+			-e 's{                                     {{g' > $out2
+		if [ $? -eq 0 ] ; then
+			break
+		fi
+		count=$(expr $count + 1)
+		if [ $count -eq 3 ] ; then
+			break
+		fi
+		echo "$$: count=$count: song_info: sqlite3: failed to fetch records from stat table" 1>&2
+		sleep 0.5
+	done
+	title1="$(sed -n 1p < $out2|cut -d= -f2-|cut -c2-)"
+	if [ -z "$title1" ] ; then
+		title1=""
+	fi
+	# artist
+	artist1="$(sed -n 7p < $out2|cut -d= -f2-|cut -c2-)"
+	if [ -z "$artist1" ] ; then
+		artist1=""
+	fi
+	# album
+	album1=$(sed -n 8p < $out2|awk '{print $3}')
+	if [ -z "$album1" ] ; then
+		album1=""
+	fi
+	# last played
+	t1=$(sed -n 3p < $out2|awk '{print $3}')
+	if [ -z "$t1" ] ; then
+		t1=0
+	fi
+	# play_count
+	t2=$(sed -n 2p < $out2|awk '{print $3}')
+	if [ -z "$t2" ] ; then
+		t2=0
+	fi
+	if [ $t1 -eq 0 -o $t2 -eq 0 ] ; then
+		last_played="never"
+	else
+		t2=$(date +%s)
+		diff=$(echo $t1 $t2|awk '{printf("%d\n", $2-$1)}')
+		days=$(echo $diff|awk '{printf("%d\n", $1/86400)}')
+		hours=$(echo $diff|awk '{printf("%d\n", ($1%86400)/3600)}')
+		mins=$(echo $diff|awk '{printf("%d\n", ($1%3600)/60)}')
+		secs=$(echo $diff|awk '{printf("%d\n", $1%60)}')
+		last_played="$(date --date=@"$t1")\n Last Played = $days days $hours hr $mins min $secs sec ago"
+	fi
+	t1=$(sed -n 6p < $out2|awk '{print $3}')
+	hours=$(echo $t1|awk '{printf("%d\n", ($1%86400)/3600)}')
+	mins=$(echo $t1|awk '{printf("%d\n", ($1%3600)/60)}')
+	secs=$(echo $t1|awk '{printf("%d\n", $1%60)}')
+	if [ "$hours" = "0" ] ; then
+		duration="$mins min $secs sec ($t1)"
+	else
+		duration="$hours hr $mins min $secs sec ($t1)"
+	fi
+	(
+	echo
+	sed \
+		-e "s{last_played.*{Last Played = $last_played{g" \
+		-e "s{duration.*{Duration = $duration{g" < $out2
+	) > $rundir/SONG_INFO
+	if [ $USE_YAD -eq 1 ] ; then
+		echo "$$: Sending Now Playing Desktop notification using yad" 
+		$convert -size "$width"x"$height" xc:"$background_colour" -font $font \
+			-pointsize $font_size -fill black -annotate +15+15 "@$rundir/SONG_INFO" $out2.png
+		# add --undecorated to remove window decoration
+		$yad --title "$title" --no-buttons --timeout=$timeout \
+			--image=$out2.png --height=$height --width=$width --notificaton
+	else
+		if [ -p /run/notify-desktop/notify-fifo ] ; then
+			echo "$$: Sending Now Playing Desktop notification using notify-send locally" 
+			(
+			echo "summary: Song Info"
+			sed -n '2,$p'  $rundir/SONG_INFO | while read line
+			do
+				if [ -n "$line" ] ; then
+					echo "body: $line"
+				fi
+			done
+			) | nc -u localhost 1807
+		else
+			echo "$$: Sending Now Playing Desktop notification using notify-send remotely" 
+			(
+			echo "summary: Song Info"
+			sed -n '2,$p'  $rundir/SONG_INFO | while read line
+			do
+				if [ -n "$line" ] ; then
+					echo "body: $line"
+				fi
+			done
+			) | nc -u notifyhost 1807
+		fi
+	fi
+	/bin/rm -f $out2 $out2.png
+	return 0
+}
+
+create_mpd_host()
+{
+	trap suicide INT TERM
+	/usr/bin/setlock -n $rundir/lock inotify -n $HOME/.config/cantata|while read line
+	do
+		if [ -z "$line" ] ; then
+			break
+		fi
+		echo "$line"| grep -q "MPD_HOST closed" 
+		if [ $? -eq 0 ] ; then
+			t1=$(cat $HOME/.config/cantata/MPD_HOST)
+			if [ -n "$t1" ] ; then
+				if [ "$t1" != "$MPD_HOST" ] ; then
+					if [ -d $servicedir/scrobble-button ] ; then
+						echo "$$: background loop: Restarting scrobble-button"
+						svc -r $servicedir/scrobble-button
+					fi
+					echo "$$: background loop: pkill -f mpc --host="$MPD_HOST idle""
+					pkill -f "mpc --host="$MPD_HOST" idle"
+				fi
+				MPD_HOST=$t1
+			else
+				sleep 1
+				echo "$$: background loop: Got MPD_HOST=null" 1>&2
+				exit 1
+			fi
+		fi
+	done
+	echo "$$: background loop: exiting..." 1>&2
+	exit 1
+}
+
+get_song()
+{
+	turi=`echo "$1" | sed -e "s{'{''{g"`
+	$sqlite -noheader -batch $stats_file "SELECT title,artist from song WHERE uri='$turi';"
+}
+
+trap suicide INT TERM
+mpc=$(which mpc)
+sqlite=$(which sqlite3)
+xmllint=$(which xmllint)
+if [ -n "$USE_YAD" -a "$USE_YAD" != "0" ] ; then
+	USE_YAD=1
+	yad=$(which yad)
+	convert=$(which convert)
+else
+	USE_YAD=0
+fi
+[ -n "$TITLE" ] && title=$TITLE
+[ -n "$WIDTH" ] && width=$WIDTH
+[ -n "$HEIGHT" ] && height=$HEIGHT
+[ -n "$FONT" ] && font=$FONT
+[ -n "$FONT_SIZE" ] && font_size=$FONT_SIZE
+[ -n "$TIMEOUT" ] && timeout=$TIMEOUT
+[ -n "$BGCOLOUR" ] && bgcolour=$bgcolour
+[ -n "$LASTFMUSER" ] && lastfmuser=$LASTFMUSER
+
+SYSTEM=$(uname -s)
+case $SYSTEM in
+	Linux)
+		servicedir=/service
+		;;
+	Darwin)
+		servicedir=/usr/local/etc/indimail/sv
+		;;
+	*)
+		servicedir=/service
+		;;
+esac
+if [ -z "$mpc" ] ; then
+	echo "$$: main: mpc not found" 1>&2
+	svc -d $servicedir/notify-screen && exit 1
+elif [ -z "$sqlite" ] ; then
+	echo "$$: main: sqlite3 not found" 1>&2
+	svc -d $servicedir/notify-screen && exit 1
+elif [ -z $xmllint ] ; then
+	echo "$$: main: xmllint not found" 1>&2
+	svc -d $servicedir/notify-screen && exit 1
+elif [ $USE_YAD -eq 1 -a -z "$yad" ] ; then
+	echo "$$: main: yad not found" 1>&2
+	svc -d $servicedir/notify-screen && exit 1
+elif [ $USE_YAD -eq 1 -a -z "$convert" ] ; then
+	echo "$$: main: convert from ImageMagick package not found" 1>&2
+	svc -d $servicedir/notify-screen && exit 1
+elif [ ! -d $servicedir ] ; then
+	echo "$$: main: $servicedir: No such file or directory" 1>&2
+	svc -d $servicedir/notify-screen && exit 1
+elif [ ! -f $HOME/.config/cantata/MPD_HOST ] ; then
+	echo "$$: main: MPD_HOST not defined in cantata config" 1>&2
+	sleep 30
+	exit 1
+elif [ -s $HOME/.config/cantata/MPD_HOST ] ; then
+	t1=$(cat $HOME/.config/cantata/MPD_HOST)
+	if [ -n "$t1" ] ; then
+		echo "$$: main: Using existing MPD_HOST=$t1" 1>&2
+		MPD_HOST=$t1
+	else
+		echo "$$: main: MPD_HOST=null in $HOME/.config/cantata/MPD_HOST" 1>&2
+		sleep 30
+		exit 1
+	fi
+else
+	echo "$$: main: zero bytes $HOME/.config/cantata/MPD_HOST" 1>&2
+	sleep 30
+	exit 1
+fi
+
+if [ -z "$MPD_HOST" ] ; then
+	echo "$$: main: MPD_HOST not set in cantata config" 1>&2
+	sleep 30
+	exit 1
+elif [ -z "$STICKER_FILE" ] ; then
+	echo "$$: main: Unable to get location of mpd sticker" 1>&2
+	sleep 30
+	exit 1
+fi
+stats_dir=$(dirname $STICKER_FILE)
+stats_file=$stats_dir/stats.db
+if [ ! -f $stats_file ] ; then
+	echo "$$: $stats_file: No such file or directory" 1>&2
+	sleep 30
+	exit 1
+fi
+
+mkdir     -p $rundir
+echo $$    > $rundir/lock
+echo $HOME > $rundir/home
+create_mpd_host &
+if [ -z "$MPDEV_TMPDIR" ] ; then
+	MPDEV_TMPDIR=/tmp/mpdev
+fi
+mkdir -p $MPDEV_TMPDIR
+out1="$(mktemp -t screen-notifyXXXX)"
+if [ -z "$out1" ] ; then
+	echo "$$: main: failed to create temporary file" 1>&2
+	exit 1
+fi
+if [ -d $servicedir/scrobble-button ] ; then
+	echo "$$: main loop: Restarting scrobble-button"
+	svc -u $servicedir/scrobble-button
+fi
+while true
+do
+	echo "$$: mainloop: mpc --host=$MPD_HOST idle"
+	i=$(mpc --host="$MPD_HOST" idle 2>$out1)
+	ret=$?
+	if [ $ret -ne 0 ] ; then
+		e=$(cat $out1)
+		echo "$$: mainloop: $(cat $out1)"
+		/bin/rm -f $out1
+		t1=$(cat $HOME/.config/cantata/MPD_HOST)
+		if [ -n "$t1" ] ; then
+			if [ "$t1" != "$MPD_HOST" ] ; then # cantata is now connected to another host
+				MPD_HOST=$t1
+				if [ -d $servicedir/scrobble-button ] ; then
+					echo "$$: main loop: Restarting scrobble-button"
+					svc -r $servicedir/scrobble-button
+				fi
+			fi
+		else
+			echo "$$: mainloop: Got MPD_HOST=null" 1>&2
+		fi
+		case "$e" in
+			"MPD error: No route to host")
+			sleep 20
+			continue
+			;;
+			"MPD error: Connection refused")
+			sleep 5
+			continue
+			;;
+			*)
+			sleep 10
+			continue
+			;;
+		esac
+	fi # if [ $ret -ne 0 ] ; then
+
+	do_continue=0
+	for state in $i
+	do
+		echo "$$: mainloop: state=$state"
+		if [ "$state" != "player" ] ; then
+			continue
+		fi
+		echo "$$: mainloop: mpc --host=$MPD_HOST status -f %file%"
+		mpc --host="$MPD_HOST" status -f %file% > $out1
+		if [ $? -ne 0 ] ; then
+			echo "$$: mainloop: mpc --host=$MPD_HOST status -f %file% failed. Creating MPD_HOST" 1>&2
+			t1=$(cat $HOME/.config/cantata/MPD_HOST)
+			if [ -n "$t1" ] ; then
+				if [ "$t1" != "$MPD_HOST" ] ; then
+					MPD_HOST=$t1
+					if [ -d $servicedir/scrobble-button ] ; then
+						echo "$$: main loop: Restarting scrobble-button"
+						svc -r $servicedir/scrobble-button
+					fi
+					do_continue=1
+				fi
+			else
+				echo "$$: mainloop: Got MPD_HOST=null" 1>&2
+				if [ -d $servicedir/scrobble-button ] ; then
+					echo "$$: main loop: Restarting scrobble-button"
+					svc -d $servicedir/scrobble-button
+				fi
+			fi
+			/bin/rm -f $out1
+			kill $!
+			break
+		fi
+		uri=$(sed -n 1p $out1)
+		pstate=$(sed -n 2p $out1|awk '{print $1}')
+		/bin/rm -f $out1
+		if [ " $pstate" != " [playing]" ] ; then
+			continue
+		fi
+		# song_info requires DISPLAY SONG_URI and STICKER_FILE to be set
+		# This sets title1, artist1 variable
+		song_info "$uri"
+		ret=$?
+		pid=$(pgrep -u $user cantata)
+		if [ $ret -ne 0 -o -z "$pid" ] ; then
+			echo "$$: mainloop: cantata not running (pid=[$pid], ret=$ret)" 1>&2
+			sleep 5
+			continue
+		fi
+		echo "$$: lastfm-scrobbler --info --artist=\"$artist1\" --track=\"$title1\""
+		# create track.xml using lastfm-scrobbler
+		lastfm-scrobbler --info --artist="$artist1" --track="$title1"
+		title2=$($xmllint --xpath 'lfm/track/name/text()' $HOME/.config/lastfm-scrobbler/track.xml|sed \
+			-e 's{&amp;{\&{g' \
+			-e 's{&lt;{<{g' \
+			-e 's{&gt;{>{g')
+		artist2=$($xmllint --xpath 'lfm/track/artist/name/text()' $HOME/.config/lastfm-scrobbler/track.xml|sed \
+			-e 's{&amp;{\&{g' \
+			-e 's{&lt;{<{g' \
+			-e 's{&gt;{>{g')
+		# this should match on both title and artist
+		# but lastfm in few cases shows different order
+		# for cases where you have multiple artists
+		# e.g. John, Santana could be Santana, John
+		# in lastfm db
+		match1=0
+		match2=0
+		t1=$(echo $title1|tr [:lower:] [:upper:])
+		t2=$(echo $title2|tr [:lower:] [:upper:])
+		if [ "$t1" = "$t2" ] ; then
+			match1=1
+		else
+			echo "$$: title1[$title1] != title2[$title2]"
+		fi
+		echo "$artist1" | grep "," >/dev/null
+		if [ $? -eq 0 ] ; then
+			match2=1
+		else
+			t1=$(echo $artist1|tr [:lower:] [:upper:])
+			t2=$(echo $artist2|tr [:lower:] [:upper:])
+			if [ "$t1" = "$t2" ] ; then
+				match2=1
+			else
+				echo "$$: artist1[$artist1] != artist2[$artist2]"
+			fi
+		fi
+		if [ $match1 -eq 1 -a $match2 -eq 1 ] ; then
+			loved=$($xmllint --xpath 'lfm/track/userloved/text()' $HOME/.config/lastfm-scrobbler/track.xml)
+		else
+			loved=0
+		fi
+		pcount=$($xmllint --xpath 'lfm/track/userplaycount/text()' $HOME/.config/lastfm-scrobbler/track.xml)
+		if [ $loved -ne 0 ] ; then
+			echo "$$: title=[$title1] by [$artist1] lastfm_playcount=$pcount is loved"
+			[ -n "$MPD_HOST" ] && mpc --host="$MPD_HOST" sendmessage scrobble love || mpc sendmessage scrobble love
+		else
+			(
+			echo "$$: title from local  [$title1], [$artist1]  not loved"
+			echo "$$: title from lastfm [$title2], [$artist2]  not loved [loved=$loved, playcount=$pcount]"
+			) 1>&2
+		fi
+	done
+	/bin/rm -f $out1
+	if [ $do_continue -eq 1 ] ; then
+		continue
+	fi
+done

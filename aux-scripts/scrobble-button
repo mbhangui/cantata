@@ -1,0 +1,188 @@
+#!/bin/sh
+#
+# This script requires ucspi-tcp, daemontools installed on the system
+#
+suicide()
+{
+	echo "$$: ARGH!!! Committing suicide on SIGTERM" 1>&2
+	exitasap=1
+	return 1
+}
+
+create_tcpscrobble_script()
+{
+	echo "#!/bin/sh"
+	echo "echo \"\$\$: connected to $1\""
+	echo "user=$user"
+	echo "exec 0<&6"
+	echo "read dummy" # OK MPD mpd_ver
+	echo "if [ -z \"\$dummy\" ] ; then"
+	echo "	echo \"error reading from network\" 1>&2"
+	echo "	exit 111"
+	echo "fi"
+	echo "echo \"dummy1=\$dummy\"" # OK MPD mpd_ver
+	echo "echo \"subscribe scrobble\" 1>&7"
+	echo "if [ \$? -ne 0 ] ; then"
+	echo "	echo \"error writing to network\" 1>&2"
+	echo "	exit 111"
+	echo "fi"
+	echo "read dummy" # OK
+	echo "if [ -z \"\$dummy\" ] ; then"
+	echo "	echo \"error reading from network\" 1>&2"
+	echo "	exit 111"
+	echo "fi"
+	echo "echo \"dummy2=\$dummy\"" # OK
+	echo "while true"
+	echo "do"
+	echo "	echo \"idle message\" 1>&7"
+	echo "	if [ \$? -ne 0 ] ; then"
+	echo "		echo \"error writing to network\" 1>&2"
+	echo "		exit 111"
+	echo "	fi"
+	echo "	read dummy" # changed: message
+	echo "	if [ -z \"\$dummy\" ] ; then"
+	echo "		echo \"error reading from network\" 1>&2"
+	echo "		exit 111"
+	echo "	fi"
+	echo "	echo \"dummy3=\$dummy\"" # changed: message
+	echo "	read dummy" # OK
+	echo "	if [ -z \"\$dummy\" ] ; then"
+	echo "		echo \"error reading from network\" 1>&2"
+	echo "		exit 111"
+	echo "	fi"
+	echo "	echo \"dummy4=\$dummy\"" # OK
+	echo "	echo \"readmessages\" 1>&7"
+	echo "	if [ \$? -ne 0 ] ; then"
+	echo "		echo \"error writing to network\" 1>&2"
+	echo "		exit 111"
+	echo "	fi"
+	echo "	read dummy" # channel: scrobble
+	echo "	if [ -z \"\$dummy\" ] ; then"
+	echo "		echo \"error reading from network\" 1>&2"
+	echo "		exit 111"
+	echo "	fi"
+	echo "	echo \"dummy5=\$dummy\"" # channel: scrobble
+	echo "	read line # most important line" # message: love or message: unlove
+	echo "	if [ -z \"\$line\" ] ; then"
+	echo "		echo \"error reading from network\" 1>&2"
+	echo "		exit 111"
+	echo "	fi"
+	echo "	echo \"mainline=\$line\"" # message: love
+	echo "	line=\$(echo \$line| cut -d: -f2| cut -c2-)"
+
+	echo "	case \"\$line\" in"
+	echo "		love)"
+	echo "		echo \"cmd=\$line\""
+	echo "		pid=\$(pgrep -u \$user cantata)"
+	echo "		if [ -n \"\$pid\" ] ; then"
+	echo "			kill -USR1 \$pid"
+	echo "		fi"
+	echo "		;;"
+	echo "		unlove)"
+	echo "		echo \"cmd=\$line\""
+	echo "		pid=\$(pgrep -u \$user cantata)"
+	echo "		if [ -n \"\$pid\" ] ; then"
+	echo "			kill -USR2 \$pid"
+	echo "		fi"
+	echo "		;;"
+	echo "	esac"
+
+	echo "	read dummy"
+	echo "	if [ -z \"\$dummy\" ] ; then"
+	echo "		echo \"error reading from network\" 1>&2"
+	echo "		exit 111"
+	echo "	fi"
+	echo "	echo \"dummy6=\$dummy\""
+	echo "done"
+}
+
+########################## main ###############################
+trap suicide INT TERM
+exitasap=0
+user=$(whoami)
+argv0=$(basename $0)
+
+for pids in $(pgrep -u $user $argv0)
+do
+	if [ $pids -ne $$ ] ; then
+		echo "$argv0: $argv0 is already running with pid $pids"
+		sleep 10
+		exit 1
+	fi
+done
+tcpclient=$(which tcpclient)
+if [ -z "$tcpclient" ] ; then
+	echo "$$: tcpcilent not found" 1>&2
+	sleep 30
+	exit 1
+elif [ ! -f $HOME/.config/cantata/MPD_HOST ] ; then
+	echo "$$: MPD_HOST not defined" 1>&2
+	sleep 30
+	exit 1
+elif [ -s $HOME/.config/cantata/MPD_HOST ] ; then
+	# MPD_HOST is created by cantata
+	t1=$(cat $HOME/.config/cantata/MPD_HOST)
+	if [ -n "$t1" ] ; then
+		echo "$$: Using existing MPD_HOST=$t1"
+		MPD_HOST=$t1
+	fi
+fi
+out=$(mktemp -t tcp-scrobbleXXXX)
+if [ -n "$MDRIVE" ] ; then
+	/bin/rm -f $out
+	if [ ! -d $MDRIVE/tmp ] ; then
+		echo "$$: Quitting: $MDRIVE not yet mounted" 1>&2
+		sleep 30
+		exit 1
+	fi
+	tcp_script=$MDRIVE/tmp/tcpscrobble-script
+	create_tcpscrobble_script $MPD_HOST > $tcp_script
+else
+	tcp_script=$out
+	create_tcpscrobble_script $MPD_HOST > $out
+fi
+chmod 755 $tcp_script
+while true
+do
+	echo $MPD_HOST|grep -q "^/" >/dev/null
+	[ $? -eq 0 ] && port="" || port=6600
+	$tcpclient $MPD_HOST $port $tcp_script 2>$out.2
+	ret=$?
+	if [ $ret -ne 0 ] ; then
+		e=$(cat $out.2 && rm -f $out.2)
+		echo "$$: ret=$ret: $e"
+		if [ ! "$e" = "Terminated" ] ; then
+			e=$(echo $e | cut -d: -f3 | cut -c2-)
+		fi
+		case "$e" in
+			"host unreachable")
+			sleep_var=40
+			;;
+			"No route to host")
+			sleep_var=20
+			;;
+			"Connection refused")
+			sleep_var=5
+			;;
+			"Terminated")
+			sleep_var=0
+			;;
+			*)
+			exitasap=1
+			sleep 20
+			;;
+		esac
+	fi
+	if [ $exitasap -eq 1 ] ; then
+		break
+	fi
+	if [ ! -f $HOME/.config/cantata/MPD_HOST ] ; then
+		echo "$HOME/.config/cantata/MPD_HOST: No such file or directory" 1>&2
+		sleep 1
+		exit 1
+	fi
+	MPD_HOST=$(cat $HOME/.config/cantata/MPD_HOST)
+	sleep $sleep_var
+done
+echo "$$: Quitting" 1>&2
+/bin/rm -f $tcp_script $out.2
