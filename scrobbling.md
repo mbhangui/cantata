@@ -41,6 +41,28 @@ Song Information Display Service
 
 When you play a song, it invokes emotions. For many, these emotions can be enhanced by simple things like displaying Album artwork, song information like the Title, Artist, Album name, Song Duration, date when you added the song to the collections, date when you last played the song, how many times have you played the song and how much you love or hate the song. Cantata doesn't display many of the mentioned information. Partly it is because many of this information is not stored by both cantata and mpd. If you install the mpdev package, lot of this missing information gets stored in a sqlite database when you play a song using mpd. However cantata doesn't have the ability to display all this information. This service supplements what is being displayed in the cantata screen by creating a popup for few seconds to display information like last played, play count, date added, rating, etc. This is implemented by a supervise(8) service named notify-screen. This service uses the mpc idle command to detect song change. Whenever a new song starts getting played, this service fetches all information about the song from mpd database, mpd sqlite sticker.db database  and mpdev sqlite stats.db database, It also connects to last.fm and fetches the 'love' status for the song. If the song is loved, it sends a message to the mpd channel named <u>scrobble</u>. The <u>scrobble-button</u> service mentioned above is subscribed to the mpd channel <u>scrobble</u>. When it sees the 'love' message, it sends **SIGUSR1** to <b>cantata</b> to turn on the 'love' button.
 
+The information displayed in the popup is like below
+
+```
+       title = There's A Boat Dat's Leavin' Soon For New York
+  play_count = 3
+ Last Played = Tuesday 08 February 2022 11:14:04 PM IST
+ Last Played = 2 years 342 days 1 hr 12 min 52 sec ago
+      rating = 6
+       karma = 50
+    Duration = 4 min 55 sec (295)
+      artist = Ella Fitzgerald and Louis Armstrong
+       album = Porgy & Bess
+       track = 13
+       genre = Vocal Jazz
+        date = 1958
+    composer =
+   performer =
+        disc =
+  Date Added = 2021-04-23 19:27:56
+Last Updated = 2021-04-23 19:27:56
+```
+
 The <b>notify-send</b> service is implemented by the <u>notify-send</u> shell script in the aux-scripts directory. The supervise run file for <b>notify-send</b> service is as below. You need to replace <u>mbhangui</u> with your login name in the supervise run file.
 
 ```
